@@ -20,14 +20,27 @@ enum class Color {
 	purple = 6
 };
 
+static Color
+getColor(unsigned color) {
+	switch (color) {
+	case 0: return Color::none;
+	case 1: return Color::red;
+	case 2: return Color::yellow;
+	case 3: return Color::green;
+	case 4: return Color::grey;
+	case 5: return Color::blue;
+	case 6: return Color::purple;
+	default: return Color::none;
+	}
+}
+
 struct Tetromino {
 	std::vector<std::vector<Color>> shape;
 	std::pair<unsigned, unsigned> topLeft;
 	Tetromino()
 	{
-		std::vector<std::vector<unsigned>>& randomShape = *shapeList.at(2);
-		Color randomColor = Color::red;
-		//TODO random
+		std::vector<std::vector<unsigned>>& randomShape = *shapeList.at(rand() % shapeList.size());
+		Color randomColor = getColor(rand() % 5 + 1);
 		for (unsigned i = 0; i < randomShape.size(); i++) {
 			std::vector<Color> tmpShape;
 			for (unsigned j = 0; j < randomShape.at(i).size(); j++) {

@@ -1,9 +1,11 @@
 #include "Game.hh"
 #include <exception>
 #include <iostream>
+#include <time.h>
 
 int main(int argc, char *args[])
 {
+	srand(time(NULL));
 	try {
 		Logic logic;
 		Game game(logic);

@@ -105,8 +105,8 @@ Game::render()
 		throw std::runtime_error(SDL_GetError());
 	}
 	auto table = logic_.getTable();
-	for (int i = 0; i < table.size(); i++) {
-		for (int j = 0; j < table.at(i).size(); j++) {
+	for (size_t i = 0; i < table.size(); i++) {
+		for (size_t j = 0; j < table.at(i).size(); j++) {
 			if (table[i][j] == Color::none) continue;
 			sect = getSect(table[i][j]);
 			dest = getDest(i, j);
