@@ -5,10 +5,12 @@
 int main(int argc, char *args[])
 {
 	try {
-		Game game;
+		Logic logic;
+		Game game(logic);
 		game.loop();
 	} catch (const std::exception& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;
+		return EXIT_FAILURE;
 	}
-	return 0;
+	return EXIT_SUCCESS;
 }

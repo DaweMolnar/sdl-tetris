@@ -2,8 +2,9 @@
 #include <stdexcept>
 #include <SDL_image.h>
 
-Game::Game()
+Game::Game(Logic& logic)
 : run_(true)
+, logic_(logic)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
@@ -19,10 +20,10 @@ Game::Game()
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	background_ = IMG_LoadTexture(ren_, "img/background.png");
+	/*background_ = IMG_LoadTexture(ren_, "img/background.png");
 	if (background_ == 0) {
 		throw std::runtime_error(SDL_GetError());
-	}
+	}*/
 }
 
 Game::~Game()
