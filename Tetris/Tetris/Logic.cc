@@ -27,7 +27,7 @@ Logic::getTable()
 	TetrisTable fullTable = landedTable_;
 	for (int i = 0; i < currentShape_->shape.size(); i++) {
 		for (int j = 0; j < currentShape_->shape.at(i).size(); j++) {
-			fullTable.at(i + currentShape_->topLeft.first).at(j + currentShape_->topLeft.second)
+			fullTable.at(j + currentShape_->topLeft.first).at(i + currentShape_->topLeft.second)
 				= currentShape_->shape.at(i).at(j);
 		}
 	}
