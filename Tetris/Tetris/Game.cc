@@ -37,11 +37,24 @@ Game::~Game()
 }
 
 void
+Game::handleKey(const SDL_Keycode& key)
+{
+	if (key == SDLK_LEFT) {
+		logic_.move(-1, 0);
+	} else if (key == SDLK_RIGHT) {
+		logic_.move(1, 0);
+	} else if (key == SDLK_DOWN) {
+		logic_.move(0, 1);
+	} else if (key == SDLK_UP) {
+		//logic_.rotate();
+	}
+}
+void
 Game::handleEvents(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_KEYDOWN:
-		run_ = false;
+		handleKey(event.key.keysym.sym);
 		break;
 	case SDL_QUIT:
 		run_ = false;
@@ -120,10 +133,17 @@ void
 Game::loop()
 {
 	while (run_) {
-		render();
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			handleEvents(e);
+		logic_.update();
+		const unsigned slowness = 50;
+		for (size_t i = 0; i < slowness; i++) {
+			render();
+			SDL_Event e;
+			while (SDL_PollEvent(&e)) {
+				handleEvents(e);
+			}
+			if (!run_) break;
+			SDL_Delay(1);
 		}
+		
 	}
 }

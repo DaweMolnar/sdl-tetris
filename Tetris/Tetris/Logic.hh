@@ -20,6 +20,9 @@ enum class Color {
 	purple = 6
 };
 
+using Shape = std::vector<std::vector<Color>>;
+using Position = std::pair<unsigned, unsigned>;
+
 static Color
 getColor(unsigned color) {
 	switch (color) {
@@ -34,9 +37,23 @@ getColor(unsigned color) {
 	}
 }
 
+static Shape
+rotate(const Shape& shape)
+{
+	Shape rotated;
+	for (size_t i = 0; i < shape.at(0).size(); ++i) {
+		std::vector<Color> tmp;
+		for (size_t j = 0; j < shape.size(); ++j) {
+			tmp.push_back(shape[j][i]);
+		}
+		rotated.push_back(tmp);
+	}
+	return std::move(rotated);
+}
+
 struct Tetromino {
-	std::vector<std::vector<Color>> shape;
-	std::pair<unsigned, unsigned> topLeft;
+	Shape shape;
+	Position topLeft;
 	Tetromino()
 	{
 		std::vector<std::vector<unsigned>>& randomShape = *shapeList.at(rand() % shapeList.size());
@@ -53,18 +70,32 @@ struct Tetromino {
 		assert(startRow > 0 && startRow < TETRIS_ROW);
 		topLeft = std::make_pair(startRow, 0u);
 	}
+
+	void rotate() {
+		shape.swap(::rotate(shape));
+	}
 };
 
 class Logic
 {
 public:
 	using TetrisTable = std::array<std::array<Color, TETRIS_COL>, TETRIS_ROW>;
+
 	Logic();
 	~Logic();
+
 	Tetromino& getNextShape() { assert(currentShape_); return *nextShape_; }
 	TetrisTable getTable();
+
+	void update();
+	void move(unsigned x, unsigned y);
+	void rotate() { currentShape_->rotate(); }
+
 private:
 	void clear();
+	void landCurrent();
+	bool canMoveTo(const Position& nextPos);
+
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
 	TetrisTable landedTable_;

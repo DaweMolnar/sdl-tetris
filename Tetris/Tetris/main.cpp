@@ -5,7 +5,7 @@
 
 int main(int argc, char *args[])
 {
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	try {
 		Logic logic;
 		Game game(logic);

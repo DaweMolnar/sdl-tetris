@@ -12,6 +12,7 @@ public:
 
 private:
 	void handleEvents(const SDL_Event& event);
+	void handleKey(const SDL_Keycode& key);
 	void render();
 
 	SDL_Window* window_;
