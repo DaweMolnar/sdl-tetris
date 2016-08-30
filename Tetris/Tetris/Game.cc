@@ -122,7 +122,7 @@ Game::render()
 		for (size_t j = 0; j < table.at(i).size(); j++) {
 			if (table[i][j] == Color::none) continue;
 			sect = getSect(table[i][j]);
-			dest = getDest(i, j);
+			dest = getDest(j, i);
 			SDL_RenderCopy(ren_, tex, &sect, &dest);
 		}
 	}
@@ -140,6 +140,9 @@ Game::loop()
 			SDL_Event e;
 			while (SDL_PollEvent(&e)) {
 				handleEvents(e);
+			}
+			if (logic_.finished()) {
+				logic_.newGame();
 			}
 			if (!run_) break;
 			SDL_Delay(1);

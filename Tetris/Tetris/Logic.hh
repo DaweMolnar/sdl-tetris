@@ -79,7 +79,7 @@ struct Tetromino {
 class Logic
 {
 public:
-	using TetrisTable = std::array<std::array<Color, TETRIS_COL>, TETRIS_ROW>;
+	using TetrisTable = std::array<std::array<Color, TETRIS_ROW>, TETRIS_COL>;
 
 	Logic();
 	~Logic();
@@ -87,13 +87,17 @@ public:
 	Tetromino& getNextShape() { assert(currentShape_); return *nextShape_; }
 	TetrisTable getTable();
 
+	void newGame();
 	void update();
 	void move(unsigned x, unsigned y);
+	bool finished();
 	void rotate() { currentShape_->rotate(); }
 
 private:
 	void clear();
 	void landCurrent();
+	void cleanFullLines();
+	void cleanLine(size_t line);
 	bool canMoveTo(const Position& nextPos);
 
 	std::unique_ptr<Tetromino> currentShape_;
