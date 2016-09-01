@@ -1,6 +1,7 @@
 #include "Game.hh"
 #include <stdexcept>
 #include <SDL_image.h>
+#include <string>
 
 static const unsigned firstBlockX = 18;
 static const unsigned firstBlockY = 24;
@@ -28,6 +29,8 @@ Game::Game(Logic& logic)
 	if (background_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
+	TTF_Init();
+	font_ = TTF_OpenFont("sample.ttf", 20);
 }
 
 Game::~Game()
@@ -46,7 +49,7 @@ Game::handleKey(const SDL_Keycode& key)
 	} else if (key == SDLK_DOWN) {
 		logic_.move(0, 1);
 	} else if (key == SDLK_UP) {
-		//logic_.rotate();
+		logic_.rotate();
 	}
 }
 void
@@ -105,18 +108,11 @@ getDest(unsigned row, unsigned col)
 	dest.h = blockDimension;
 	return dest;
 }
-
 void
-Game::render()
+Game::renderTable(SDL_Texture* tex)
 {
-	SDL_RenderClear(ren_);
-	SDL_RenderCopy(ren_, background_, NULL, NULL);
 	SDL_Rect sect;
 	SDL_Rect dest;
-	SDL_Texture* tex = IMG_LoadTexture(ren_, "img/blocks.png");
-	if (tex == 0) {
-		throw std::runtime_error(SDL_GetError());
-	}
 	auto table = logic_.getTable();
 	for (size_t i = 0; i < table.size(); i++) {
 		for (size_t j = 0; j < table.at(i).size(); j++) {
@@ -126,7 +122,60 @@ Game::render()
 			SDL_RenderCopy(ren_, tex, &sect, &dest);
 		}
 	}
+}
+
+void
+Game::renderNextShape(SDL_Texture* tex)
+{
+	SDL_Rect sect;
+	SDL_Rect dest;
+	dest.w = blockDimension / 2;
+	dest.h = blockDimension / 2;
+	auto shape = logic_.getNextShape();
+	for (size_t i = 0; i < shape.shape.size(); i++) {
+		for (size_t j = 0; j < shape.shape.at(i).size(); j++) {
+			if (shape.shape[i][j] == Color::none) continue;
+			sect = getSect(shape.shape[i][j]);
+			dest.x = firstBlockX + dest.w * j + 400;
+			dest.y = firstBlockY + dest.w * i + 30;
+			SDL_RenderCopy(ren_, tex, &sect, &dest);
+		}
+	}
+}
+void
+Game::renderScore()
+{
+	SDL_Color color = { 255, 255, 255, 255 };
+	SDL_Rect destination;
+	destination.x = 420;
+	destination.y = 150;
+	renderText(color, destination, std::to_string(logic_.getScore()));
+}
+void
+Game::render()
+{
+	SDL_RenderClear(ren_);
+	SDL_RenderCopy(ren_, background_, NULL, NULL);
+	SDL_Texture* tex = IMG_LoadTexture(ren_, "img/blocks.png");
+	if (tex == 0) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	renderTable(tex);
+	renderNextShape(tex);
+	renderScore();
 	SDL_RenderPresent(ren_);
+}
+void
+Game::renderText(const SDL_Color& color, SDL_Rect& destination, const std::string& text)
+{
+	if (font_ == nullptr) {
+		throw std::runtime_error("No font declared");
+	}
+	SDL_Surface *surf = TTF_RenderText_Blended(font_, text.c_str(), color);
+	SDL_Texture* score = SDL_CreateTextureFromSurface(ren_, surf);
+	SDL_FreeSurface(surf);
+	SDL_QueryTexture(score, NULL, NULL, &destination.w, &destination.h);
+	SDL_RenderCopy(ren_, score, NULL, &destination);
 }
 
 void

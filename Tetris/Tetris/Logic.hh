@@ -46,6 +46,7 @@ rotate(const Shape& shape)
 		for (size_t j = 0; j < shape.size(); ++j) {
 			tmp.push_back(shape[j][i]);
 		}
+		std::reverse(tmp.begin(), tmp.end());
 		rotated.push_back(tmp);
 	}
 	return std::move(rotated);
@@ -70,10 +71,6 @@ struct Tetromino {
 		assert(startRow > 0 && startRow < TETRIS_ROW);
 		topLeft = std::make_pair(startRow, 0u);
 	}
-
-	void rotate() {
-		shape.swap(::rotate(shape));
-	}
 };
 
 class Logic
@@ -91,17 +88,19 @@ public:
 	void update();
 	void move(unsigned x, unsigned y);
 	bool finished();
-	void rotate() { currentShape_->rotate(); }
+	void rotate();
+	size_t getScore() { return currentScore_; }
 
 private:
 	void clear();
 	void landCurrent();
 	void cleanFullLines();
 	void cleanLine(size_t line);
-	bool canMoveTo(const Position& nextPos);
+	bool canMoveTo(const Shape& shape, const Position& nextPos);
 
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
 	TetrisTable landedTable_;
+	size_t currentScore_;
 };
 

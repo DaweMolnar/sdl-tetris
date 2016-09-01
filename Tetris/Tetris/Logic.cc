@@ -15,6 +15,7 @@ Logic::~Logic()
 void
 Logic::clear()
 {
+	currentScore_ = 0;
 	for (size_t i = 0; i < landedTable_.size(); i++) {
 		for (size_t j = 0; j < landedTable_.at(i).size(); j++) {
 			landedTable_[i][j] = Color::none;
@@ -25,7 +26,7 @@ Logic::clear()
 Logic::TetrisTable
 Logic::getTable()
 {
-	if (!canMoveTo(currentShape_->topLeft)) return landedTable_;
+	if (!canMoveTo(currentShape_->shape, currentShape_->topLeft)) return landedTable_;
 	TetrisTable fullTable = landedTable_;
 	for (size_t i = 0; i < currentShape_->shape.size(); i++) {
 		for (size_t j = 0; j < currentShape_->shape.at(i).size(); j++) {
@@ -38,11 +39,11 @@ Logic::getTable()
 }
 
 bool
-Logic::canMoveTo(const Position& nextPos)
+Logic::canMoveTo(const Shape& shape, const Position& nextPos)
 {
-	for (size_t i = 0; i < currentShape_->shape.size(); i++) {
-		for (size_t j = 0; j < currentShape_->shape.at(i).size(); j++) {
-			if (currentShape_->shape.at(i).at(j) == Color::none) continue;
+	for (size_t i = 0; i < shape.size(); i++) {
+		for (size_t j = 0; j < shape.at(i).size(); j++) {
+			if (shape.at(i).at(j) == Color::none) continue;
 			unsigned nextX = i + nextPos.second;
 			unsigned nextY = j + nextPos.first;
 			if (nextX >= landedTable_.size() || nextY >= landedTable_.at(j).size()) return false;
@@ -57,6 +58,7 @@ Logic::canMoveTo(const Position& nextPos)
 void
 Logic::cleanLine(size_t line)
 {
+	currentScore_ += 100;
 	for (size_t i = line; i > 0; i--) {
 		landedTable_.at(i).swap(landedTable_.at(i - 1));
 	}
@@ -94,7 +96,7 @@ Logic::update()
 {
 	Position nextPos_ = currentShape_->topLeft;
 	nextPos_.second += 1;
-	if (canMoveTo(nextPos_)) currentShape_->topLeft = nextPos_;
+	if (canMoveTo(currentShape_->shape, nextPos_)) currentShape_->topLeft = nextPos_;
 	else landCurrent();
 }
 
@@ -104,12 +106,12 @@ Logic::move(unsigned x, unsigned y)
 	Position nextPos_ = currentShape_->topLeft;
 	nextPos_.first += x;
 	nextPos_.second += y;
-	if (canMoveTo(nextPos_)) currentShape_->topLeft = nextPos_;
+	if (canMoveTo(currentShape_->shape, nextPos_)) currentShape_->topLeft = nextPos_;
 }
 
 bool
 Logic::finished() {
-	return (!canMoveTo(currentShape_->topLeft));
+	return (!canMoveTo(currentShape_->shape, currentShape_->topLeft));
 }
 
 void
@@ -118,4 +120,13 @@ Logic::newGame()
 	currentShape_ = std::make_unique<Tetromino>();
 	nextShape_ = std::make_unique<Tetromino>();
 	clear();
+}
+
+void
+Logic::rotate()
+{
+	auto newShape = ::rotate(currentShape_->shape);
+	if (canMoveTo(newShape, currentShape_->topLeft)) {
+		std::swap(newShape, currentShape_->shape);
+	}
 }
