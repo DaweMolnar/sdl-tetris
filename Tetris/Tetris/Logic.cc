@@ -15,6 +15,7 @@ Logic::~Logic()
 void
 Logic::clear()
 {
+	if (currentScore_ > highScore_) highScore_ = currentScore_;
 	currentScore_ = 0;
 	for (size_t i = 0; i < landedTable_.size(); i++) {
 		for (size_t j = 0; j < landedTable_.at(i).size(); j++) {

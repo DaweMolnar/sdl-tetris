@@ -90,6 +90,7 @@ public:
 	bool finished();
 	void rotate();
 	size_t getScore() { return currentScore_; }
+	size_t highScore() { return highScore_; }
 
 private:
 	void clear();
@@ -101,6 +102,7 @@ private:
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
 	TetrisTable landedTable_;
-	size_t currentScore_;
+	size_t currentScore_ = 0;
+	size_t highScore_ = 0;
 };
 

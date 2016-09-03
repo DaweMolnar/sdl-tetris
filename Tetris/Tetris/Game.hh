@@ -18,6 +18,7 @@ private:
 	void handleKey(const SDL_Keycode& key);
 	void render();
 	void renderScore();
+	void renderHighScore();
 	void renderTable(SDL_Texture* tex);
 	void renderNextShape(SDL_Texture* tex);
 

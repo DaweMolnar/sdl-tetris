@@ -168,6 +168,17 @@ Game::renderScore()
 	destination.y = 150;
 	renderText(color, destination, std::to_string(logic_.getScore()));
 }
+
+void
+Game::renderHighScore()
+{
+	SDL_Color color = { 255, 255, 255, 255 };
+	SDL_Rect destination;
+	destination.x = 420;
+	destination.y = 225;
+	renderText(color, destination, std::to_string(logic_.highScore()));
+}
+
 void
 Game::render()
 {
@@ -176,6 +187,7 @@ Game::render()
 	renderTable(blockTexture_);
 	renderNextShape(blockTexture_);
 	renderScore();
+	renderHighScore();
 	SDL_RenderPresent(ren_);
 }
 void
@@ -197,7 +209,8 @@ Game::loop()
 {
 	while (run_) {
 		logic_.update();
-		const unsigned slowness = 50;
+		unsigned slowness = 50 - (logic_.getScore() / 100);
+		if (slowness < 1) slowness = 1;
 		for (size_t i = 0; i < slowness; i++) {
 			render();
 			SDL_Event e;
