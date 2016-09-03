@@ -31,10 +31,16 @@ Game::Game(Logic& logic)
 	}
 	TTF_Init();
 	font_ = TTF_OpenFont("sample.ttf", 20);
+	blockTexture_ = IMG_LoadTexture(ren_, "img/blocks.png");
+	if (blockTexture_ == 0) {
+		throw std::runtime_error(SDL_GetError());
+	}
 }
 
 Game::~Game()
 {
+	SDL_DestroyTexture(blockTexture_);
+	SDL_DestroyTexture(background_);
 	SDL_DestroyRenderer(ren_);
 	SDL_DestroyWindow(window_);
 }
@@ -156,12 +162,8 @@ Game::render()
 {
 	SDL_RenderClear(ren_);
 	SDL_RenderCopy(ren_, background_, NULL, NULL);
-	SDL_Texture* tex = IMG_LoadTexture(ren_, "img/blocks.png");
-	if (tex == 0) {
-		throw std::runtime_error(SDL_GetError());
-	}
-	renderTable(tex);
-	renderNextShape(tex);
+	renderTable(blockTexture_);
+	renderNextShape(blockTexture_);
 	renderScore();
 	SDL_RenderPresent(ren_);
 }
@@ -171,11 +173,12 @@ Game::renderText(const SDL_Color& color, SDL_Rect& destination, const std::strin
 	if (font_ == nullptr) {
 		throw std::runtime_error("No font declared");
 	}
-	SDL_Surface *surf = TTF_RenderText_Blended(font_, text.c_str(), color);
+	SDL_Surface* surf = TTF_RenderText_Blended(font_, text.c_str(), color);
 	SDL_Texture* score = SDL_CreateTextureFromSurface(ren_, surf);
 	SDL_FreeSurface(surf);
 	SDL_QueryTexture(score, NULL, NULL, &destination.w, &destination.h);
 	SDL_RenderCopy(ren_, score, NULL, &destination);
+	SDL_DestroyTexture(score);
 }
 
 void

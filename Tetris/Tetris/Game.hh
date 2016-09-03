@@ -24,6 +24,7 @@ private:
 	SDL_Renderer* ren_;
 	TTF_Font* font_;
 	SDL_Texture *background_;
+	SDL_Texture *blockTexture_;
 	Logic& logic_;
 	bool run_;
 };
