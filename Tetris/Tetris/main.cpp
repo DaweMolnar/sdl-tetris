@@ -12,6 +12,7 @@ int main(int argc, char *args[])
 		game.loop();
 	} catch (const std::exception& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;
+		while (true) {}
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

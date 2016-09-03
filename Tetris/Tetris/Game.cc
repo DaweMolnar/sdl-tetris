@@ -35,11 +35,22 @@ Game::Game(Logic& logic)
 	if (blockTexture_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
+	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+	bgMusic_ = Mix_LoadMUS("music/bg.mp3");
+	if (bgMusic_ == 0)
+		throw std::runtime_error(SDL_GetError());
+	if (Mix_PlayMusic(bgMusic_, -1) == -1)
+		throw std::runtime_error(SDL_GetError());
 }
 
 Game::~Game()
 {
+	Mix_FreeMusic(bgMusic_);
 	SDL_DestroyTexture(blockTexture_);
+	TTF_CloseFont(font_);
 	SDL_DestroyTexture(background_);
 	SDL_DestroyRenderer(ren_);
 	SDL_DestroyWindow(window_);
