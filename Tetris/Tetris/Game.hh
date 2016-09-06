@@ -8,7 +8,7 @@
 class Game
 {
 public:
-	Game(Logic& logic);
+	Game(Logic& logic1, Logic& logic2);
 	~Game();
 	void loop();
 
@@ -17,10 +17,10 @@ private:
 	void handleEvents(const SDL_Event& event);
 	void handleKey(const SDL_Keycode& key);
 	void render();
-	void renderScore();
-	void renderHighScore();
-	void renderTable(SDL_Texture* tex);
-	void renderNextShape(SDL_Texture* tex);
+	void renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY);
+	void renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topleftY);
+	void renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY);
+	void renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY);
 
 	SDL_Window* window_;
 	SDL_Renderer* ren_;
@@ -28,7 +28,8 @@ private:
 	TTF_Font* font_;
 	SDL_Texture *background_;
 	SDL_Texture *blockTexture_;
-	Logic& logic_;
+	Logic& logicPlayer1_; 
+	Logic& logicPlayer2_;
 	bool run_;
 };
 

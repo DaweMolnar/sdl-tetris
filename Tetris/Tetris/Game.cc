@@ -3,18 +3,22 @@
 #include <SDL_image.h>
 #include <string>
 
-static const unsigned firstBlockX = 18;
-static const unsigned firstBlockY = 24;
-static const unsigned blockDimension = 35;
+static const unsigned table1X = 18;
+static const unsigned table1Y = 24;
+static const unsigned table2X = 577;
+static const unsigned table2Y = 24;
+static const unsigned tableWidth = 385;
+static const unsigned tableHeight = 595;
 
-Game::Game(Logic& logic)
+Game::Game(Logic& logic1, Logic& logic2)
 : run_(true)
-, logic_(logic)
+, logicPlayer1_(logic1)
+, logicPlayer2_(logic2)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	window_ = SDL_CreateWindow("Tetris", 100, 100, 560, 640, SDL_WINDOW_SHOWN);
+	window_ = SDL_CreateWindow("Tetris", 100, 100, 1120, 640, SDL_WINDOW_SHOWN);
 	if (window_ == nullptr) {
 		throw std::runtime_error(SDL_GetError());
 	}
@@ -60,13 +64,21 @@ void
 Game::handleKey(const SDL_Keycode& key)
 {
 	if (key == SDLK_LEFT) {
-		logic_.move(-1, 0);
+		logicPlayer2_.move(-1, 0);
 	} else if (key == SDLK_RIGHT) {
-		logic_.move(1, 0);
+		logicPlayer2_.move(1, 0);
 	} else if (key == SDLK_DOWN) {
-		logic_.move(0, 1);
+		logicPlayer2_.move(0, 1);
 	} else if (key == SDLK_UP) {
-		logic_.rotate();
+		logicPlayer2_.rotate();
+	} else if (key == SDLK_a) {
+		logicPlayer1_.move(-1, 0);
+	} else if (key == SDLK_d) {
+		logicPlayer1_.move(1, 0);
+	} else if (key == SDLK_s) {
+		logicPlayer1_.move(0, 1);
+	} else if (key == SDLK_w) {
+		logicPlayer1_.rotate();
 	}
 }
 void
@@ -116,67 +128,67 @@ getSect(Color color)
 }
 
 SDL_Rect
-getDest(unsigned row, unsigned col)
+getDest(unsigned row, unsigned col, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect dest;
-	dest.x = firstBlockX + blockDimension * row;
-	dest.y = firstBlockY + blockDimension * col;
-	dest.w = blockDimension;
-	dest.h = blockDimension;
+	dest.x = topleftX + (tableWidth / TETRIS_ROW) * row;
+	dest.y = topleftY + (tableHeight / TETRIS_COL) * col;
+	dest.w = (tableWidth / TETRIS_ROW);
+	dest.h = (tableHeight / TETRIS_COL);
 	return dest;
 }
 void
-Game::renderTable(SDL_Texture* tex)
+Game::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
-	auto table = logic_.getTable();
+	auto table = logic.getTable();
 	for (size_t i = 0; i < table.size(); i++) {
 		for (size_t j = 0; j < table.at(i).size(); j++) {
 			if (table[i][j] == Color::none) continue;
 			sect = getSect(table[i][j]);
-			dest = getDest(j, i);
+			dest = getDest(j, i, topleftX, topleftY);
 			SDL_RenderCopy(ren_, tex, &sect, &dest);
 		}
 	}
 }
 
 void
-Game::renderNextShape(SDL_Texture* tex)
+Game::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
-	dest.w = blockDimension / 2;
-	dest.h = blockDimension / 2;
-	auto shape = logic_.getNextShape();
+	dest.w = tableWidth / TETRIS_ROW / 2;
+	dest.h = tableHeight / TETRIS_COL / 2;
+	auto shape = logic.getNextShape();
 	for (size_t i = 0; i < shape.shape.size(); i++) {
 		for (size_t j = 0; j < shape.shape.at(i).size(); j++) {
 			if (shape.shape[i][j] == Color::none) continue;
 			sect = getSect(shape.shape[i][j]);
-			dest.x = firstBlockX + dest.w * j + 400;
-			dest.y = firstBlockY + dest.w * i + 30;
+			dest.x = topleftX + dest.w * j + 400;
+			dest.y = topleftY + dest.h * i + 30;
 			SDL_RenderCopy(ren_, tex, &sect, &dest);
 		}
 	}
 }
 void
-Game::renderScore()
+Game::renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
-	destination.x = 420;
-	destination.y = 150;
-	renderText(color, destination, std::to_string(logic_.getScore()));
+	destination.x = topleftX;
+	destination.y = topleftY;
+	renderText(color, destination, std::to_string(logic.getScore()));
 }
 
 void
-Game::renderHighScore()
+Game::renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
-	destination.x = 420;
-	destination.y = 225;
-	renderText(color, destination, std::to_string(logic_.highScore()));
+	destination.x = topleftX;
+	destination.y = topleftY;
+	renderText(color, destination, std::to_string(logic.highScore()));
 }
 
 void
@@ -184,10 +196,18 @@ Game::render()
 {
 	SDL_RenderClear(ren_);
 	SDL_RenderCopy(ren_, background_, NULL, NULL);
-	renderTable(blockTexture_);
-	renderNextShape(blockTexture_);
-	renderScore();
-	renderHighScore();
+
+	renderTable(logicPlayer1_, blockTexture_, table1X, table1Y);
+	renderNextShape(logicPlayer1_, blockTexture_, table1X, table1Y);
+
+	renderTable(logicPlayer2_, blockTexture_, table2X, table2Y);
+	renderNextShape(logicPlayer2_, blockTexture_, table2X, table2Y);
+
+	renderScore(logicPlayer1_, 420, 150);
+	renderScore(logicPlayer2_, 420 + table2X - table1X, 150);
+
+	renderHighScore(logicPlayer1_, 420, 225);
+	renderHighScore(logicPlayer2_, 420 + table2X - table1X, 225);
 	SDL_RenderPresent(ren_);
 }
 void
@@ -208,8 +228,9 @@ void
 Game::loop()
 {
 	while (run_) {
-		logic_.update();
-		unsigned slowness = 50 - (logic_.getScore() / 100);
+		logicPlayer1_.update();
+		logicPlayer2_.update();
+		unsigned slowness = 50;
 		if (slowness < 1) slowness = 1;
 		for (size_t i = 0; i < slowness; i++) {
 			render();
@@ -217,8 +238,9 @@ Game::loop()
 			while (SDL_PollEvent(&e)) {
 				handleEvents(e);
 			}
-			if (logic_.finished()) {
-				logic_.newGame();
+			if (logicPlayer1_.finished() || logicPlayer2_.finished()) {
+				logicPlayer1_.newGame();
+				logicPlayer2_.newGame();
 			}
 			if (!run_) break;
 			SDL_Delay(1);
