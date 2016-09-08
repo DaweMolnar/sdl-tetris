@@ -89,9 +89,13 @@ public:
 	void move(unsigned x, unsigned y);
 	bool finished();
 	void rotate();
+
 	size_t getScore() { return currentScore_; }
 	size_t highScore() { return highScore_; }
 
+	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
+
+	void addPlusLine();
 private:
 	void clear();
 	void landCurrent();
@@ -104,5 +108,6 @@ private:
 	TetrisTable landedTable_;
 	size_t currentScore_ = 0;
 	size_t highScore_ = 0;
+	Logic* enemy_ = nullptr;
 };
 

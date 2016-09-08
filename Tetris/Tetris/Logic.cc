@@ -79,7 +79,10 @@ Logic::cleanFullLines()
 				break;
 			}
 		}
-		if (complete) cleanLine(i);
+		if (complete) {
+			if (enemy_ != nullptr) enemy_->addPlusLine();
+			cleanLine(i);
+		}
 	}
 }
 
@@ -129,5 +132,20 @@ Logic::rotate()
 	auto newShape = ::rotate(currentShape_->shape);
 	if (canMoveTo(newShape, currentShape_->topLeft)) {
 		std::swap(newShape, currentShape_->shape);
+	}
+}
+
+void
+Logic::addPlusLine()
+{
+	for (size_t i = 0; i < landedTable_.size() - 1; i++) {
+		landedTable_.at(i + 1).swap(landedTable_.at(i));
+	}
+
+	const size_t lastLine = landedTable_.size() - 1;
+	const size_t skippedPos = (rand() % landedTable_.at(lastLine).size());
+	for (size_t i = 0; i < landedTable_.at(lastLine).size(); i++) {
+		if (i == skippedPos) landedTable_.at(lastLine).at(i) = Color::none;
+		else landedTable_.at(lastLine).at(i) = Color::grey;
 	}
 }
