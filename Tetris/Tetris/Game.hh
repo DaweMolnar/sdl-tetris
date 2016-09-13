@@ -1,14 +1,19 @@
 #pragma once
 #include "Logic.hh"
+#include "Ai.hh"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+enum class GameType {
+	AI,
+	TWOPLAYER
+};
 
 class Game
 {
 public:
-	Game(Logic& logic1, Logic& logic2);
+	Game(Logic& logic1, Logic& logic2, GameType type);
 	~Game();
 	void loop();
 
@@ -30,6 +35,7 @@ private:
 	SDL_Texture *blockTexture_;
 	Logic& logicPlayer1_; 
 	Logic& logicPlayer2_;
+	std::unique_ptr<Ai> ai_;
 	bool run_;
 };
 

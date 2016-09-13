@@ -10,7 +10,7 @@ static const unsigned table2Y = 24;
 static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
-Game::Game(Logic& logic1, Logic& logic2)
+Game::Game(Logic& logic1, Logic& logic2, GameType type)
 : run_(true)
 , logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
@@ -48,6 +48,9 @@ Game::Game(Logic& logic1, Logic& logic2)
 		throw std::runtime_error(SDL_GetError());
 	if (Mix_PlayMusic(bgMusic_, -1) == -1)
 		throw std::runtime_error(SDL_GetError());
+	if (type == GameType::AI) {
+		ai_ = std::make_unique<Ai>(logicPlayer1_);
+	}
 }
 
 Game::~Game()
@@ -71,7 +74,11 @@ Game::handleKey(const SDL_Keycode& key)
 		logicPlayer2_.move(0, 1);
 	} else if (key == SDLK_UP) {
 		logicPlayer2_.rotate();
-	} else if (key == SDLK_a) {
+	}
+
+	if (ai_) return;
+
+	if (key == SDLK_a) {
 		logicPlayer1_.move(-1, 0);
 	} else if (key == SDLK_d) {
 		logicPlayer1_.move(1, 0);
@@ -238,6 +245,7 @@ Game::loop()
 			while (SDL_PollEvent(&e)) {
 				handleEvents(e);
 			}
+			if (ai_) ai_->makeNextMove();
 			if (logicPlayer1_.finished() || logicPlayer2_.finished()) {
 				logicPlayer1_.newGame();
 				logicPlayer2_.newGame();

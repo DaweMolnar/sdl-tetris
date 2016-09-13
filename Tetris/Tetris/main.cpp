@@ -11,7 +11,7 @@ int main(int argc, char *args[])
 		Logic player2;
 		player1.setEnemy(player2);
 		player2.setEnemy(player1);
-		Game game(player1, player2);
+		Game game(player1, player2, GameType::AI);
 		game.loop();
 	} catch (const std::exception& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;

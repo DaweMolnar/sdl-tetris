@@ -24,6 +24,9 @@
     <ClCompile Include="Logic.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ai.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hh">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shapes.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ai.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
