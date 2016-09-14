@@ -7,7 +7,8 @@ class Ai
 public:
 	Ai(Logic& logic);
 	~Ai();
-	void makeNextMove() const { logic_.move(0, 1); }
+	int getLogicScore(const Position pos, const Shape& shape) const;
+	void makeNextMove() const;
 private:
 	Logic& logic_;
 };

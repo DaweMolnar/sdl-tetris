@@ -81,7 +81,8 @@ public:
 	Logic();
 	~Logic();
 
-	Tetromino& getNextShape() { assert(currentShape_); return *nextShape_; }
+	Tetromino& getNextShape() { assert(nextShape_); return *nextShape_; }
+	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
 	TetrisTable getTable();
 
 	void newGame();
@@ -96,12 +97,14 @@ public:
 	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
 
 	void addPlusLine();
+	bool canMoveTo(const Shape& shape, const Position& nextPos);
+
 private:
+
 	void clear();
 	void landCurrent();
 	void cleanFullLines();
 	void cleanLine(size_t line);
-	bool canMoveTo(const Shape& shape, const Position& nextPos);
 
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
