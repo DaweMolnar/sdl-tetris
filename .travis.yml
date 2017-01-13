@@ -1,0 +1,19 @@
+language: cpp
+compiler:
+- gcc
+- clang
+sudo: false
+script:
+- cd out
+- cmake ..
+- make
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+    - clang
+    - libsdl2-dev
+    - libsdl2-ttf-dev
+    - libsdl2-mixer-dev
