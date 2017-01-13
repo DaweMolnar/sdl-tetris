@@ -1,8 +1,11 @@
 language: cpp
+before_install:
+- sudo add-apt-repository "deb http://ppa.launchpad.net/zoogie/sdl2-snapshots/ubuntu precise main"
+- sudo apt-get update
+- sudo apt-get -y install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
 compiler:
 - gcc
 - clang
-sudo: true
 script:
 - cd out
 - cmake ..
@@ -14,4 +17,3 @@ addons:
     packages:
     - g++-4.8
     - clang
-    - libsdl2-dev
