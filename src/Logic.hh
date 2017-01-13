@@ -2,6 +2,7 @@
 #include "Shapes.hh"
 
 #include <stdexcept>
+#include <algorithm>
 #include <memory>
 #include <array>
 #include <vector>

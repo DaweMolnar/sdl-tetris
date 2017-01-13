@@ -13,8 +13,8 @@ Ai::getLogicScore(const Position pos, const Shape& shape)
 const
 {
 	unsigned score = 0;
-	for (int i = 0; i < shape.size(); i++) {
-		for (int j = 0; j < shape.at(i).size(); j++) {
+	for (size_t i = 0; i < shape.size(); i++) {
+		for (size_t j = 0; j < shape.at(i).size(); j++) {
 			if (shape.at(i).at(j) != Color::none) {
 				int lineNeg = (TETRIS_COL - (pos.second + i));
 				score += lineNeg;

@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <SDL_image.h>
 #include <string>
+#include <memory>
 
 static const unsigned table1X = 18;
 static const unsigned table1Y = 24;
@@ -11,9 +12,9 @@ static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
 Game::Game(Logic& logic1, Logic& logic2, GameType type)
-: run_(true)
-, logicPlayer1_(logic1)
+:  logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
+, run_(true)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
