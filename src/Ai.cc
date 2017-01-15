@@ -18,6 +18,11 @@ const
 			if (shape.at(i).at(j) != Color::none) {
 				int lineNeg = (TETRIS_COL - (pos.second + i));
 				score += lineNeg;
+				unsigned p = 1;
+				while (logic_.pointIsEmpty(i+p, j)) {
+					score += 1;
+					p++;
+				}
 			}
 		}
 	}

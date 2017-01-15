@@ -95,6 +95,11 @@ public:
 	size_t getScore() { return currentScore_; }
 	size_t highScore() { return highScore_; }
 
+	bool pointIsEmpty(unsigned x, unsigned y) {
+		if (x >= landedTable_.size() || y >= landedTable_.at(0).size()) return false;
+		return (landedTable_.at(x).at(y) == Color::none);
+	}
+
 	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
 
 	void addPlusLine();
