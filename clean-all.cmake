@@ -5,6 +5,9 @@ set(cmake_generated ${CMAKE_BINARY_DIR}/CMakeCache.txt
                     ${CMAKE_BINARY_DIR}/src/cmake_install.cmake  
                     ${CMAKE_BINARY_DIR}/src/Makefile
                     ${CMAKE_BINARY_DIR}/src/CMakeFiles
+                    ${CMAKE_BINARY_DIR}/test/cmake_install.cmake  
+                    ${CMAKE_BINARY_DIR}/test/Makefile
+                    ${CMAKE_BINARY_DIR}/test/CMakeFiles
 )
 
 foreach(file ${cmake_generated})

@@ -44,11 +44,11 @@ Game::Game(Logic& logic1, Logic& logic2, GameType type)
 		throw std::runtime_error(SDL_GetError());
 	}
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
-	bgMusic_ = Mix_LoadMUS("music/bg.mp3");
+	/*bgMusic_ = Mix_LoadMUS("music/bg.mp3");
 	if (bgMusic_ == 0)
 		throw std::runtime_error(SDL_GetError());
 	if (Mix_PlayMusic(bgMusic_, -1) == -1)
-		throw std::runtime_error(SDL_GetError());
+		throw std::runtime_error(SDL_GetError());*/
 	if (type == GameType::AI) {
 		ai_ = std::make_unique<Ai>(logicPlayer1_);
 	}
@@ -56,7 +56,7 @@ Game::Game(Logic& logic1, Logic& logic2, GameType type)
 
 Game::~Game()
 {
-	Mix_FreeMusic(bgMusic_);
+	//Mix_FreeMusic(bgMusic_);
 	SDL_DestroyTexture(blockTexture_);
 	TTF_CloseFont(font_);
 	SDL_DestroyTexture(background_);

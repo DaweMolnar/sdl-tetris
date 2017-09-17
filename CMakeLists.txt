@@ -14,11 +14,17 @@ else()
 	endif()
 endif()
 
+# Usefull to get CPPUNIT ...
+# I would love to find a way to have cppunit
+# only required for builds where unit test make sense ...
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/")
+FIND_PACKAGE(CPPUNIT REQUIRED)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
 add_subdirectory(src)
+add_subdirectory(test)
 
 #clean
 add_custom_target(clean-cmake-files
