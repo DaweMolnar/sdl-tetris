@@ -5,7 +5,6 @@ before_install:
 - sudo apt-get -y --allow-unauthenticated install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libcppunit-dev
 install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-    - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7"; fi
 compiler:
 - gcc
 - clang
