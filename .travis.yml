@@ -16,7 +16,7 @@ script:
 addons:
   apt:
     sources:
-    - llvm-toolchain-precise
+    - llvm-toolchain-trusty
     - ubuntu-toolchain-r-test
     packages:
     - g++-5
