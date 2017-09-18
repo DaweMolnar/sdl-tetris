@@ -13,7 +13,7 @@ script:
 - cd out
 - cmake ..
 - make
--addons:
+addons:
  -  apt:
  -    sources:
  -    - llvm-toolchain-trusty
