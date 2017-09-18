@@ -12,7 +12,7 @@ compiler:
 script:
 - cd out
 - cmake ..
-- make
+- make V=1
 addons:
   apt:
     sources:
