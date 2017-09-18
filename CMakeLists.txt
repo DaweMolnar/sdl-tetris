@@ -14,9 +14,6 @@ else()
 	endif()
 endif()
 
-# Usefull to get CPPUNIT ...
-# I would love to find a way to have cppunit
-# only required for builds where unit test make sense ...
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/")
 FIND_PACKAGE(CPPUNIT REQUIRED)
 
