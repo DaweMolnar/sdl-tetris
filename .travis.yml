@@ -14,12 +14,12 @@ script:
 - cmake ..
 - make
 addons:
- -  apt:
- -    sources:
- -    - llvm-toolchain-trusty
- -    - ubuntu-toolchain-r-test
- -    packages:
- -    - g++-5
- -    - clang-3.7
- -    - gcc-
- -    - pkg-config
+  apt:
+    sources:
+    - llvm-toolchain-precise
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5
+    - clang-3.7
+    - gcc-
+    - pkg-config
