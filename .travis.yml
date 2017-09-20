@@ -12,6 +12,7 @@ script:
 - cd out
 - cmake ..
 - make
+- cd ..
 - find . -path ./out -prune -o -name '*.cc' -o -name '*.cpp' -o -name '*.hh' -o -name '*.h' | xargs pmccabe -c 2>/dev/null | ./pmccabe.awk
 addons:
   apt:
