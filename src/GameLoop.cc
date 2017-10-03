@@ -1,7 +1,4 @@
 #include "GameLoop.hh"
-//#include <stdexcept>
-//#include <SDL_image.h>
-//#include <string>
 #include <memory>
 
 GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type)
