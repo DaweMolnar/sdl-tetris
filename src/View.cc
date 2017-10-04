@@ -1,8 +1,7 @@
-#include "Game.hh"
+#include "View.hh"
 #include <stdexcept>
 #include <SDL_image.h>
 #include <string>
-#include <memory>
 
 static const unsigned table1X = 18;
 static const unsigned table1Y = 24;
@@ -11,10 +10,9 @@ static const unsigned table2Y = 24;
 static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
-Game::Game(Logic& logic1, Logic& logic2, GameType type)
-:  logicPlayer1_(logic1)
+View::View(Logic& logic1, Logic& logic2)
+: logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
-, run_(true)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
@@ -49,60 +47,15 @@ Game::Game(Logic& logic1, Logic& logic2, GameType type)
 		throw std::runtime_error(SDL_GetError());
 	if (Mix_PlayMusic(bgMusic_, -1) == -1)
 		throw std::runtime_error(SDL_GetError());*/
-	if (type == GameType::AI) {
-		ai_ = std::make_unique<Ai>(logicPlayer1_);
-	}
 }
 
-Game::~Game()
-{
+View::~View() {
 	//Mix_FreeMusic(bgMusic_);
 	SDL_DestroyTexture(blockTexture_);
 	TTF_CloseFont(font_);
 	SDL_DestroyTexture(background_);
 	SDL_DestroyRenderer(ren_);
 	SDL_DestroyWindow(window_);
-}
-
-void
-Game::handleKey(const SDL_Keycode& key)
-{
-	if (key == SDLK_LEFT) {
-		logicPlayer2_.move(-1, 0);
-	} else if (key == SDLK_RIGHT) {
-		logicPlayer2_.move(1, 0);
-	} else if (key == SDLK_DOWN) {
-		logicPlayer2_.move(0, 1);
-	} else if (key == SDLK_UP) {
-		logicPlayer2_.rotate();
-	}
-
-	if (ai_) return;
-
-	if (key == SDLK_a) {
-		logicPlayer1_.move(-1, 0);
-	} else if (key == SDLK_d) {
-		logicPlayer1_.move(1, 0);
-	} else if (key == SDLK_s) {
-		logicPlayer1_.move(0, 1);
-	} else if (key == SDLK_w) {
-		logicPlayer1_.rotate();
-	}
-}
-void
-Game::handleEvents(const SDL_Event& event)
-{
-	switch (event.type) {
-	case SDL_KEYDOWN:
-		handleKey(event.key.keysym.sym);
-		break;
-	case SDL_QUIT:
-		run_ = false;
-		break;
-	default:
-		run_ = true;
-		break;
-	}
 }
 
 SDL_Rect
@@ -146,7 +99,7 @@ getDest(unsigned row, unsigned col, const unsigned topleftX, const unsigned topl
 	return dest;
 }
 void
-Game::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
+View::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
@@ -162,7 +115,7 @@ Game::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const
 }
 
 void
-Game::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
+View::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
@@ -180,7 +133,7 @@ Game::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, c
 	}
 }
 void
-Game::renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
@@ -190,7 +143,7 @@ Game::renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY
 }
 
 void
-Game::renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
@@ -200,7 +153,7 @@ Game::renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topl
 }
 
 void
-Game::render()
+View::render()
 {
 	SDL_RenderClear(ren_);
 	SDL_RenderCopy(ren_, background_, NULL, NULL);
@@ -219,7 +172,7 @@ Game::render()
 	SDL_RenderPresent(ren_);
 }
 void
-Game::renderText(const SDL_Color& color, SDL_Rect& destination, const std::string& text)
+View::renderText(const SDL_Color& color, SDL_Rect& destination, const std::string& text)
 {
 	if (font_ == nullptr) {
 		throw std::runtime_error("No font declared");
@@ -230,30 +183,4 @@ Game::renderText(const SDL_Color& color, SDL_Rect& destination, const std::strin
 	SDL_QueryTexture(score, NULL, NULL, &destination.w, &destination.h);
 	SDL_RenderCopy(ren_, score, NULL, &destination);
 	SDL_DestroyTexture(score);
-}
-
-void
-Game::loop()
-{
-	while (run_) {
-		logicPlayer1_.update();
-		logicPlayer2_.update();
-		unsigned slowness = 50;
-		if (slowness < 1) slowness = 1;
-		for (size_t i = 0; i < slowness; i++) {
-			render();
-			SDL_Event e;
-			while (SDL_PollEvent(&e)) {
-				handleEvents(e);
-			}
-			if (ai_) ai_->makeNextMove();
-			if (logicPlayer1_.finished() || logicPlayer2_.finished()) {
-				logicPlayer1_.newGame();
-				logicPlayer2_.newGame();
-			}
-			if (!run_) break;
-			SDL_Delay(1);
-		}
-		
-	}
 }
