@@ -4,7 +4,7 @@
 
 
 Ai::Ai(Logic& logic)
-: logic_(logic)
+: ControllerInterface(logic)
 {
 }
 
@@ -30,8 +30,7 @@ const
 }
 
 void
-Ai::makeNextMove()
-const
+Ai::tick()
 {
 	auto originShape = logic_.getCurrentShape().shape;
 	auto currentPos = logic_.getCurrentShape().topLeft;
