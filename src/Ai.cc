@@ -2,12 +2,6 @@
 #include <iostream>
 #include <cassert>
 
-
-Ai::Ai(Logic& logic)
-: ControllerInterface(logic)
-{
-}
-
 int
 Ai::getLogicScore(const Position pos, const Shape& shape)
 const
