@@ -38,20 +38,7 @@ getColor(unsigned color) {
 	}
 }
 
-static Shape
-rotate(const Shape& shape)
-{
-	Shape rotated;
-	for (size_t i = 0; i < shape.at(0).size(); ++i) {
-		std::vector<Color> tmp;
-		for (size_t j = 0; j < shape.size(); ++j) {
-			tmp.push_back(shape[j][i]);
-		}
-		std::reverse(tmp.begin(), tmp.end());
-		rotated.push_back(tmp);
-	}
-	return rotated;
-}
+Shape rotate(const Shape& shape);
 
 struct Tetromino {
 	Shape shape;
