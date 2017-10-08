@@ -36,7 +36,7 @@ Logic::getTable()
 				= currentShape_->shape.at(i).at(j);
 		}
 	}
-	return std::move(fullTable);
+	return fullTable;
 }
 
 bool

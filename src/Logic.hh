@@ -50,7 +50,7 @@ rotate(const Shape& shape)
 		std::reverse(tmp.begin(), tmp.end());
 		rotated.push_back(tmp);
 	}
-	return std::move(rotated);
+	return rotated;
 }
 
 struct Tetromino {
