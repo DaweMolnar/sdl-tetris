@@ -1,6 +1,21 @@
 #include "Logic.hh"
 #include <iostream>
 
+Shape
+rotate(const Shape& shape)
+{
+	Shape rotated;
+	for (size_t i = 0; i < shape.at(0).size(); ++i) {
+		std::vector<Color> tmp;
+		for (size_t j = 0; j < shape.size(); ++j) {
+			tmp.push_back(shape[j][i]);
+		}
+		std::reverse(tmp.begin(), tmp.end());
+		rotated.push_back(tmp);
+	}
+	return rotated;
+}
+
 Logic::Logic()
 {
 	currentShape_ = std::make_unique<Tetromino>();
@@ -36,7 +51,7 @@ Logic::getTable()
 				= currentShape_->shape.at(i).at(j);
 		}
 	}
-	return std::move(fullTable);
+	return fullTable;
 }
 
 bool

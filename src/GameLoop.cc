@@ -1,6 +1,7 @@
 #include "GameLoop.hh"
 #include "Ai.hh"
 #include "LocalController.hh"
+#include "KeyMap.hh"
 #include <memory>
 
 GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, Character& character1, Character& character2, GameType type)
@@ -9,11 +10,13 @@ GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, Character& characte
 , view_(view)
 , run_(true)
 {
-	controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1);
+	KeyMap km1{SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN, SDLK_SPACE};
+	KeyMap km2{SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_LSHIFT}; //TODO get from parameter
+	controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1, km1);
 	if (type == GameType::AI) {
 		controlPlayer2_ = std::make_unique<Ai>(logicPlayer2_, character2);
 	} else {
-		controlPlayer2_ = std::make_unique<LocalController>(logicPlayer2_, character2);
+		controlPlayer2_ = std::make_unique<LocalController>(logicPlayer2_, character2, km2);
 	}
 }
 
