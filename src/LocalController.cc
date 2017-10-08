@@ -3,29 +3,16 @@
 void
 LocalController::handleKey(const SDL_Keycode& key)
 {
-	if (key == SDLK_LEFT) {
+	if (key == keyMap_.left) {
 		logic_.move(-1, 0);
-	} else if (key == SDLK_RIGHT) {
+	} else if (key == keyMap_.right) {
 		logic_.move(1, 0);
-	} else if (key == SDLK_DOWN) {
+	} else if (key == keyMap_.down) {
 		logic_.move(0, 1);
-	} else if (key == SDLK_UP) {
+	} else if (key == keyMap_.up) {
 		logic_.rotate();
-	} else if (key == SDLK_SPACE) {
+	} else if (key == keyMap_.special) {
 		character_.doSpecial();
 	}
-
-	/*if (ai_) return;
-
-	if (key == SDLK_a) {
-		logicPlayer1_.move(-1, 0);
-	} else if (key == SDLK_d) {
-		logicPlayer1_.move(1, 0);
-	} else if (key == SDLK_s) {
-		logicPlayer1_.move(0, 1);
-	} else if (key == SDLK_w) {
-		logicPlayer1_.rotate();
-	}
-	*/
 }
 
