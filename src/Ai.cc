@@ -65,7 +65,3 @@ Ai::tick()
 	if (move != 0) logic_.move(move < 1 ? -1 : 1, 0);
 	else logic_.move(0, 1);
 }
-
-Ai::~Ai()
-{
-}
