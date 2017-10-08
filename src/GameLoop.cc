@@ -1,4 +1,6 @@
 #include "GameLoop.hh"
+#include "Ai.hh"
+#include "LocalController.hh"
 #include <memory>
 
 GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type)
@@ -7,34 +9,11 @@ GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type)
 , view_(view)
 , run_(true)
 {
+	controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_);
 	if (type == GameType::AI) {
-		ai_ = std::make_unique<Ai>(logicPlayer1_);
-	}
-}
-
-void
-GameLoop::handleKey(const SDL_Keycode& key)
-{
-	if (key == SDLK_LEFT) {
-		logicPlayer2_.move(-1, 0);
-	} else if (key == SDLK_RIGHT) {
-		logicPlayer2_.move(1, 0);
-	} else if (key == SDLK_DOWN) {
-		logicPlayer2_.move(0, 1);
-	} else if (key == SDLK_UP) {
-		logicPlayer2_.rotate();
-	}
-
-	if (ai_) return;
-
-	if (key == SDLK_a) {
-		logicPlayer1_.move(-1, 0);
-	} else if (key == SDLK_d) {
-		logicPlayer1_.move(1, 0);
-	} else if (key == SDLK_s) {
-		logicPlayer1_.move(0, 1);
-	} else if (key == SDLK_w) {
-		logicPlayer1_.rotate();
+		controlPlayer2_ = std::make_unique<Ai>(logicPlayer2_);
+	} else {
+		controlPlayer2_ = std::make_unique<LocalController>(logicPlayer2_);
 	}
 }
 
@@ -43,7 +22,8 @@ GameLoop::handleEvents(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_KEYDOWN:
-		handleKey(event.key.keysym.sym);
+		controlPlayer1_->handleKey(event.key.keysym.sym);
+		controlPlayer2_->handleKey(event.key.keysym.sym);
 		break;
 	case SDL_QUIT:
 		run_ = false;
@@ -68,7 +48,8 @@ GameLoop::loop()
 			while (SDL_PollEvent(&e)) {
 				handleEvents(e);
 			}
-			if (ai_) ai_->makeNextMove();
+			controlPlayer1_->tick();
+			controlPlayer2_->tick();
 			if (logicPlayer1_.finished() || logicPlayer2_.finished()) {
 				logicPlayer1_.newGame();
 				logicPlayer2_.newGame();

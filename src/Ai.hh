@@ -1,15 +1,15 @@
 #pragma once
 #include "Logic.hh"
+#include "ControllerInterface.hh"
 #include <SDL.h>
 
-class Ai
+class Ai : public ControllerInterface
 {
 public:
 	Ai(Logic& logic);
-	~Ai();
-	int getLogicScore(const Position pos, const Shape& shape) const;
-	void makeNextMove() const;
+	void tick() override;
+	void handleKey(const SDL_Keycode&) override {}
 private:
-	Logic& logic_;
+	int getLogicScore(const Position pos, const Shape& shape) const;
 };
 

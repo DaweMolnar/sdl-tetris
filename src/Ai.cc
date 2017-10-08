@@ -4,7 +4,7 @@
 
 
 Ai::Ai(Logic& logic)
-: logic_(logic)
+: ControllerInterface(logic)
 {
 }
 
@@ -30,8 +30,7 @@ const
 }
 
 void
-Ai::makeNextMove()
-const
+Ai::tick()
 {
 	auto originShape = logic_.getCurrentShape().shape;
 	auto currentPos = logic_.getCurrentShape().topLeft;
@@ -65,8 +64,4 @@ const
 	int move = wantedPos.first - logic_.getCurrentShape().topLeft.first;
 	if (move != 0) logic_.move(move < 1 ? -1 : 1, 0);
 	else logic_.move(0, 1);
-}
-
-Ai::~Ai()
-{
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Logic.hh"
-#include "Ai.hh"
+#include "ControllerInterface.hh"
 #include "View.hh"
 
 #include <SDL.h>
@@ -19,12 +19,12 @@ public:
 
 private:
 	void handleEvents(const SDL_Event& event);
-	void handleKey(const SDL_Keycode& key);
 	
 	Logic& logicPlayer1_; 
 	Logic& logicPlayer2_;
 	View& view_;
-	std::unique_ptr<Ai> ai_;
+	std::unique_ptr<ControllerInterface> controlPlayer1_;
+	std::unique_ptr<ControllerInterface> controlPlayer2_;
 	bool run_;
 };
 
