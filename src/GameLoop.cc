@@ -3,7 +3,7 @@
 #include "LocalController.hh"
 #include <memory>
 
-GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type)
+GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, Character& character1, Character& character2, GameType type)
 :  logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
 , view_(view)
