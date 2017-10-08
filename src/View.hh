@@ -24,7 +24,7 @@ private:
 
 	SDL_Window* window_;
 	SDL_Renderer* ren_;
-	Mix_Music* bgMusic_;
+//	Mix_Music* bgMusic_;
 	TTF_Font* font_;
 	SDL_Texture *background_;
 	SDL_Texture *blockTexture_;

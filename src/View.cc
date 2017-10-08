@@ -84,6 +84,9 @@ getSect(Color color)
 	case Color::purple:
 		sect.x = 250;
 		break;
+	case Color::none:
+		assert(false);
+		break;
 	}
 	return sect;
 }
