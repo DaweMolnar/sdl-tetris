@@ -1,5 +1,7 @@
 #include "GameLoop.hh"
 #include "View.hh"
+#include "Character.hh"
+
 #include <exception>
 #include <iostream>
 #include <time.h>
@@ -13,7 +15,9 @@ int main(int argc, char *args[])
 		player1.setEnemy(player2);
 		player2.setEnemy(player1);
 		View view(player1, player2);
-		GameLoop game(player1, player2, view, GameType::AI);
+		BetaCharacter character1(player1, player2);
+		BetaCharacter character2(player2, player1);
+		GameLoop game(player1, player2, view, character1, character2, GameType::AI);
 		game.loop();
 	} catch (const std::exception& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;

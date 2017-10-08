@@ -6,7 +6,7 @@
 class Ai : public ControllerInterface
 {
 public:
-	Ai(Logic& logic);
+	Ai(Logic& logic, Character& character) : ControllerInterface(logic, character) {}
 	void tick() override;
 	void handleKey(const SDL_Keycode&) override {}
 private:

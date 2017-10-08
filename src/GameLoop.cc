@@ -3,17 +3,17 @@
 #include "LocalController.hh"
 #include <memory>
 
-GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type)
-:  logicPlayer1_(logic1)
+GameLoop::GameLoop(Logic& logic1, Logic& logic2, View& view, Character& character1, Character& character2, GameType type)
+: logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
 , view_(view)
 , run_(true)
 {
-	controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_);
+	controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1);
 	if (type == GameType::AI) {
-		controlPlayer2_ = std::make_unique<Ai>(logicPlayer2_);
+		controlPlayer2_ = std::make_unique<Ai>(logicPlayer2_, character2);
 	} else {
-		controlPlayer2_ = std::make_unique<LocalController>(logicPlayer2_);
+		controlPlayer2_ = std::make_unique<LocalController>(logicPlayer2_, character2);
 	}
 }
 
@@ -56,7 +56,6 @@ GameLoop::loop()
 			}
 			if (!run_) break;
 			SDL_Delay(1);
-		}
-		
+		}	
 	}
 }

@@ -2,6 +2,7 @@
 #include "Logic.hh"
 #include "ControllerInterface.hh"
 #include "View.hh"
+#include "Character.hh"
 
 #include <SDL.h>
 
@@ -14,7 +15,14 @@ enum class GameType {
 class GameLoop
 {
 public:
-	GameLoop(Logic& logic1, Logic& logic2, View& view, GameType type);
+	GameLoop(
+			Logic& logic1
+			, Logic& logic2
+			, View& view
+			, Character& character1
+			, Character& character2
+			, GameType type
+	);
 	void loop();
 
 private:
