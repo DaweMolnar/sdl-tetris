@@ -7,8 +7,6 @@ LocalController::handleKey(const SDL_Keycode& key)
 		logic_.move(-1, 0);
 	} else if (key == keyMap_.right) {
 		logic_.move(1, 0);
-	} else if (key == keyMap_.down) {
-		logic_.move(0, 1);
 	} else if (key == keyMap_.up) {
 		logic_.rotate();
 	} else if (key == keyMap_.special) {
@@ -16,3 +14,9 @@ LocalController::handleKey(const SDL_Keycode& key)
 	}
 }
 
+void
+LocalController::tick()
+{
+	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
+	if ( keystate[keyMap_.down] ) logic_.move(0, 1);
+}
