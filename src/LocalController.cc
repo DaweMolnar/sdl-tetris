@@ -11,6 +11,8 @@ LocalController::handleKey(const SDL_Keycode& key)
 		logic_.move(0, 1);
 	} else if (key == SDLK_UP) {
 		logic_.rotate();
+	} else if (key == SDLK_SPACE) {
+		character_.doSpecial();
 	}
 
 	/*if (ai_) return;
