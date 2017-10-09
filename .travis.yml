@@ -26,3 +26,11 @@ addons:
     - pkg-config
     - pmccabe
     - gawk
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: out/Tetris
+  skip_cleanup: true
+  on:
+    tags: true
