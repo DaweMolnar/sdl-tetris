@@ -5,7 +5,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -y --allow-unauthenticated install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libcppunit-dev; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 sdl2-image sdl2-ttf sdl2-mixer cppunit; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer cppunit; fi
 
 install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
