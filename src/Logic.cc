@@ -79,6 +79,7 @@ Logic::cleanLine(size_t line)
 		landedTable_.at(i).swap(landedTable_.at(i - 1));
 	}
 	for (size_t i = 0; i < landedTable_.at(0).size(); i++) {
+		if (landedTable_.at(0).at(i) == Color::magic) currentMana_++;
 		landedTable_.at(0).at(i) = Color::none;
 	}
 }
@@ -138,6 +139,7 @@ Logic::newGame()
 {
 	currentShape_ = std::make_unique<Tetromino>();
 	nextShape_ = std::make_unique<Tetromino>();
+	clearMana();
 	clear();
 }
 
