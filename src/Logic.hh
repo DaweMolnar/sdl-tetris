@@ -18,7 +18,8 @@ enum class Color {
 	green = 3,
 	grey = 4,
 	blue = 5,
-	purple = 6
+	purple = 6,
+	magic = 7
 };
 
 using Shape = std::vector<std::vector<Color>>;
@@ -34,6 +35,7 @@ getColor(unsigned color) {
 	case 4: return Color::grey;
 	case 5: return Color::blue;
 	case 6: return Color::purple;
+	case 7: return Color::magic;
 	default: return Color::none;
 	}
 }
@@ -50,7 +52,7 @@ struct Tetromino {
 		for (unsigned i = 0; i < randomShape.size(); i++) {
 			std::vector<Color> tmpShape;
 			for (unsigned j = 0; j < randomShape.at(i).size(); j++) {
-				tmpShape.push_back((randomShape[i][j] == 1) ? randomColor : Color::none);
+				tmpShape.push_back((randomShape[i][j] == 1) ? randomColor : Color::none); //TODO add random magic color
 			}
 			shape.push_back(tmpShape);
 		}
