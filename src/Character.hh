@@ -17,5 +17,5 @@ class BetaCharacter : public Character {
 public:
 	BetaCharacter(Logic& selfLogic, Logic& enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
-	void doSpecial() override {}
+	void doSpecial() override { selfLogic_.clearMana(); }
 };
