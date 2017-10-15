@@ -10,6 +10,7 @@
 
 static const size_t TETRIS_ROW = 11;
 static const size_t TETRIS_COL = 17;
+static const size_t MANA_PROBABILITY = 20;
 
 enum class Color {
 	none = 0,
@@ -18,7 +19,8 @@ enum class Color {
 	green = 3,
 	grey = 4,
 	blue = 5,
-	purple = 6
+	purple = 6,
+	magic = 7
 };
 
 using Shape = std::vector<std::vector<Color>>;
@@ -34,6 +36,7 @@ getColor(unsigned color) {
 	case 4: return Color::grey;
 	case 5: return Color::blue;
 	case 6: return Color::purple;
+	case 7: return Color::magic;
 	default: return Color::none;
 	}
 }
@@ -50,7 +53,8 @@ struct Tetromino {
 		for (unsigned i = 0; i < randomShape.size(); i++) {
 			std::vector<Color> tmpShape;
 			for (unsigned j = 0; j < randomShape.at(i).size(); j++) {
-				tmpShape.push_back((randomShape[i][j] == 1) ? randomColor : Color::none);
+				int hasMagic = (rand() % MANA_PROBABILITY) == 0;
+				tmpShape.push_back((randomShape[i][j] == 1) ? (hasMagic ? Color::magic : randomColor) : Color::none);
 			}
 			shape.push_back(tmpShape);
 		}
@@ -81,6 +85,8 @@ public:
 
 	size_t getScore() { return currentScore_; }
 	size_t highScore() { return highScore_; }
+	size_t getMana() { return currentMana_; }
+	void clearMana() { currentMana_ = 0; }
 
 	bool pointIsEmpty(unsigned x, unsigned y) {
 		if (x >= landedTable_.size() || y >= landedTable_.at(0).size()) return false;
@@ -104,6 +110,7 @@ private:
 	TetrisTable landedTable_;
 	size_t currentScore_ = 0;
 	size_t highScore_ = 0;
+	size_t currentMana_ = 0;
 	Logic* enemy_ = nullptr;
 };
 
