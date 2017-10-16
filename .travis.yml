@@ -39,7 +39,7 @@ deploy:
   api_key:
     secure: MBELHG4/x9rdeRHSAjY9PAS5wv4peTbmsEComUfeFD9ExQpcVAzoVtVjwQKAGQoPrrpXUBkmIYyA+dlU4AcH5FjQCYRBY7Nu5v7T+6ucTwY5H7JVvPi8rcu6xjgRRa2kqh+L2KDrJg69wtQUg6sW2IiY7bBESrduFjAjJIvwjkdP5SfI9RG/KkNKLGV/0nOhlMWyK/njjS69UsNZVdjhzI1oQov1o+PKjzFxMq4l98pbO+ORKfurnZTEy9ze0HYQPhoM/Fal6Z3sKHa8vuSkTEGwZqA7/prB/XM0r8XR1pheclFSYyTVPKr4iNY0fvx2mqQBEkn1X4LRRQ8xyA691mDqW+hmVE8RgBCDX2YLAfZrfFoNOvP6LdB3gu8BgGKFuuOaqrjzoJ7l4aq1n6Jh9CqqUu+1/XN9rK4dM5/Tc90csBF2muP1AWcY+eBE016naHVEhM6pyCGg2l4xg1cS4hlsEp9/CKUQTFtUt+uMEODHeIoEYXp8S4hR8eXu7cwwhboRmcD505ciZpXw3srazVyPWmn9U7BSccu8ydF/9RLJvvkkgm3PBdFfDDkrHQf/Ric/8veRDHj8RP6W8Bn4iawHJ0BnbRV9c2NYIx72NRzEafl6jekp5mz5XMYsoMn2OTzeFlJ2caR/ClWtU41lllqMUEIexp0epmt/Iaay+iQ=
   file_glob: true
-  file: out/*
+  file: out/Tetris
   skip_cleanup: true
   on:
     tags: true
