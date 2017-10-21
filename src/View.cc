@@ -109,7 +109,7 @@ View::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
-	auto table = logic.getTable();
+	auto table = logic.getTableWithShape();
 	for (size_t i = 0; i < table.size(); i++) {
 		for (size_t j = 0; j < table.at(i).size(); j++) {
 			if (table[i][j] == Color::none) continue;

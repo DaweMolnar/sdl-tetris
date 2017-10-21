@@ -18,6 +18,6 @@ class BetaCharacter : public Character {
 public:
 	BetaCharacter(Logic& selfLogic, Logic& enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
-	void doSpecial() override { if (canDoSpecial()) selfLogic_.clearMana(); }
-	bool canDoSpecial() override { return false; }
+	void doSpecial() override;
+	bool canDoSpecial() override { return selfLogic_.getMana() > 2; }
 };

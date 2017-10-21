@@ -30,8 +30,6 @@ Logic::~Logic()
 void
 Logic::clear()
 {
-	if (currentScore_ > highScore_) highScore_ = currentScore_;
-	currentScore_ = 0;
 	for (size_t i = 0; i < landedTable_.size(); i++) {
 		for (size_t j = 0; j < landedTable_.at(i).size(); j++) {
 			landedTable_[i][j] = Color::none;
@@ -40,7 +38,7 @@ Logic::clear()
 }
 
 Logic::TetrisTable
-Logic::getTable()
+Logic::getTableWithShape()
 {
 	if (!canMoveTo(currentShape_->shape, currentShape_->topLeft)) return landedTable_;
 	TetrisTable fullTable = landedTable_;
@@ -105,7 +103,7 @@ Logic::cleanFullLines()
 void
 Logic::landCurrent()
 {
-	landedTable_ = getTable();
+	landedTable_ = getTableWithShape();
 	std::swap(nextShape_, currentShape_);
 	nextShape_ = std::make_unique<Tetromino>();
 	cleanFullLines();
@@ -135,11 +133,19 @@ Logic::finished() {
 }
 
 void
+Logic::clearStats()
+{
+	if (currentScore_ > highScore_) highScore_ = currentScore_;
+	currentScore_ = 0;
+	clearMana();
+}
+
+void
 Logic::newGame()
 {
 	currentShape_ = std::make_unique<Tetromino>();
 	nextShape_ = std::make_unique<Tetromino>();
-	clearMana();
+	clearStats();
 	clear();
 }
 
