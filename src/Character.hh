@@ -9,6 +9,7 @@ public:
 	virtual ~Character() {}
 	virtual void doSpecial()=0;
 	virtual bool canDoSpecial()=0;
+	virtual char* getAvatar()=0; 
 protected:
 	Logic& selfLogic_;
 	Logic& enemyLogic_;
@@ -19,5 +20,6 @@ public:
 	BetaCharacter(Logic& selfLogic, Logic& enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
 	void doSpecial() override;
+	char* getAvatar() override { return "img/betachar.png"; }
 	bool canDoSpecial() override { return selfLogic_.getMana() > 2; }
 };
