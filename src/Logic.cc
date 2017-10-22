@@ -104,9 +104,15 @@ void
 Logic::landCurrent()
 {
 	landedTable_ = getTableWithShape();
+	resetCurrent();
+	cleanFullLines();
+}
+
+void
+Logic::resetCurrent()
+{
 	std::swap(nextShape_, currentShape_);
 	nextShape_ = std::make_unique<Tetromino>();
-	cleanFullLines();
 }
 
 void
@@ -129,7 +135,8 @@ Logic::move(unsigned x, unsigned y)
 
 bool
 Logic::finished() {
-	return (!canMoveTo(currentShape_->shape, currentShape_->topLeft));
+	gameFailed_ = (!canMoveTo(currentShape_->shape, currentShape_->topLeft));
+	return gameFailed_;
 }
 
 void
@@ -143,6 +150,8 @@ Logic::clearStats()
 void
 Logic::newGame()
 {
+	gamesWon_ += gameFailed_ ? 0 : 1;
+	gameFailed_ = false;
 	currentShape_ = std::make_unique<Tetromino>();
 	nextShape_ = std::make_unique<Tetromino>();
 	clearStats();

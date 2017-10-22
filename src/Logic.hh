@@ -77,7 +77,7 @@ public:
 	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
 	TetrisTable getTableWithShape();
 	TetrisTable getTable() { return landedTable_; }
-	void changeTable(TetrisTable& newTable) { landedTable_ = newTable; } //TODO handle if currentShape is in the way
+	void changeTable(TetrisTable& newTable) { resetCurrent(); landedTable_ = newTable; }
 
 	void newGame();
 	void update();
@@ -87,6 +87,7 @@ public:
 
 	size_t getScore() { return currentScore_; }
 	size_t highScore() { return highScore_; }
+	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
 	void clearMana() { currentMana_ = 0; }
 
@@ -105,6 +106,7 @@ private:
 
 	void clear();
 	void landCurrent();
+	void resetCurrent();
 	void cleanFullLines();
 	void cleanLine(size_t line);
 	void clearStats();
@@ -112,6 +114,8 @@ private:
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
 	TetrisTable landedTable_;
+	bool gameFailed_ = false;
+	size_t gamesWon_ = 0;
 	size_t currentScore_ = 0;
 	size_t highScore_ = 0;
 	size_t currentMana_ = 0;
