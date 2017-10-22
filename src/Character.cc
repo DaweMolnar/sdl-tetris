@@ -1,13 +1,37 @@
 #include "Character.hh"
 
 void
-BetaCharacter::doSpecial() {
-	//selfLogic_.clearTable();
+Character::doSpecial() {
+	size_t mana = selfLogic_.getMana();
+	if (mana >= 9) {
+		skillHigh();
+	} else if (mana >= 6) {
+		skillMedium();
+	} else if (mana >= 3) {
+		skillLow();
+	} else {
+		return;
+	}
+	selfLogic_.clearMana();
+}
+
+void
+BetaCharacter::skillLow()
+{
+	enemyLogic_.addPlusLine();
+}
+
+void
+BetaCharacter::skillMedium()
+{
 	Logic::TetrisTable self = selfLogic_.getTable();
 	Logic::TetrisTable enemy = enemyLogic_.getTable();
 	selfLogic_.changeTable(enemy);
 	enemyLogic_.changeTable(self);
-	if (canDoSpecial()) {
-		selfLogic_.clearMana();
-	}
+}
+
+void
+BetaCharacter::skillHigh()
+{
+	selfLogic_.clearTable();
 }
