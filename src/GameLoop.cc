@@ -25,6 +25,10 @@ GameLoop::handleEvents(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_KEYDOWN:
+		if (event.key.keysym.sym == SDLK_ESCAPE) {
+			run_ = false;
+			return;
+		}
 		controlPlayer1_->handleKey(event.key.keysym.sym);
 		controlPlayer2_->handleKey(event.key.keysym.sym);
 		break;
