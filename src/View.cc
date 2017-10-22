@@ -85,7 +85,7 @@ getSect(Color color)
 		sect.x = 250;
 		break;
 	case Color::magic:
-		sect.x = 150;//TODO add magic block color to sprite
+		sect.x = 300;
 		break;
 	case Color::none:
 		assert(false);
