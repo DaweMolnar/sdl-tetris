@@ -75,7 +75,9 @@ public:
 
 	Tetromino& getNextShape() { assert(nextShape_); return *nextShape_; }
 	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
-	TetrisTable getTable();
+	TetrisTable getTableWithShape();
+	TetrisTable getTable() { return landedTable_; }
+	void changeTable(TetrisTable& newTable) { landedTable_ = newTable; } //TODO handle if currentShape is in the way
 
 	void newGame();
 	void update();
@@ -96,6 +98,7 @@ public:
 	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
 
 	void addPlusLine();
+	void clearTable() { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
 
 private:
@@ -104,6 +107,7 @@ private:
 	void landCurrent();
 	void cleanFullLines();
 	void cleanLine(size_t line);
+	void clearStats();
 
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
