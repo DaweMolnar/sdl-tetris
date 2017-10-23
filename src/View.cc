@@ -11,8 +11,7 @@ static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
 View::View(Logic& logic1, Logic& logic2)
-: logicPlayer1_(logic1)
-, logicPlayer2_(logic2)
+: ViewInterface(logic1, logic2)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
