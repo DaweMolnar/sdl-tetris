@@ -18,7 +18,7 @@ public:
 	GameLoop(
 			Logic& logic1
 			, Logic& logic2
-			, View& view
+			, std::shared_ptr<ViewInterface> view
 			, Character& character1
 			, Character& character2
 			, GameType type
@@ -30,7 +30,7 @@ private:
 	
 	Logic& logicPlayer1_; 
 	Logic& logicPlayer2_;
-	View& view_;
+	std::shared_ptr<ViewInterface> view_;
 	std::unique_ptr<ControllerInterface> controlPlayer1_;
 	std::unique_ptr<ControllerInterface> controlPlayer2_;
 	bool run_;

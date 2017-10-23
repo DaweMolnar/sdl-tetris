@@ -14,7 +14,7 @@ int main(int argc, char *args[])
 		Logic player2;
 		player1.setEnemy(player2);
 		player2.setEnemy(player1);
-		View view(player1, player2);
+		std::shared_ptr<View> view = std::make_shared<View>(player1, player2);
 		BetaCharacter character1(player1, player2);
 		BetaCharacter character2(player2, player1);
 		GameLoop game(player1, player2, view, character1, character2, GameType::AI);
