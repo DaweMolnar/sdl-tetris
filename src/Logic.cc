@@ -72,7 +72,6 @@ Logic::canMoveTo(const Shape& shape, const Position& nextPos)
 void
 Logic::cleanLine(size_t line)
 {
-	currentScore_ += 100;
 	for (size_t i = line; i > 0; i--) {
 		landedTable_.at(i).swap(landedTable_.at(i - 1));
 	}
@@ -142,8 +141,6 @@ Logic::finished() {
 void
 Logic::clearStats()
 {
-	if (currentScore_ > highScore_) highScore_ = currentScore_;
-	currentScore_ = 0;
 	clearMana();
 }
 
