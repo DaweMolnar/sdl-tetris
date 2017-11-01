@@ -1,14 +1,13 @@
 #include "Character.hh"
-#include <string>
 
 void
 Character::doSpecial() {
 	size_t mana = selfLogic_.getMana();
-	if (mana >= 9) {
+	if (mana >= 3) {
 		skillHigh();
-	} else if (mana >= 6) {
+	} else if (mana >= 2) {
 		skillMedium();
-	} else if (mana >= 3) {
+	} else if (mana >= 1) {
 		skillLow();
 	} else {
 		return;
@@ -17,13 +16,13 @@ Character::doSpecial() {
 }
 
 void
-BetaCharacter::skillLow()
+Ninja::skillLow()
 {
 	enemyLogic_.addPlusLine();
 }
 
 void
-BetaCharacter::skillMedium()
+Ninja::skillMedium()
 {
 	Logic::TetrisTable self = selfLogic_.getTable();
 	Logic::TetrisTable enemy = enemyLogic_.getTable();
@@ -32,13 +31,49 @@ BetaCharacter::skillMedium()
 }
 
 void
-BetaCharacter::skillHigh()
+Ninja::skillHigh()
 {
 	selfLogic_.clearTable();
 }
 
-std::array<std::string, 3>
-BetaCharacter::getSpecials()
+void
+Warrior::skillLow()
 {
-	return {{"1 Wind","2 Shove","3 Copy"}};
+	enemyLogic_.addPlusLine();
+}
+
+void
+Warrior::skillMedium()
+{
+	Logic::TetrisTable self = selfLogic_.getTable();
+	Logic::TetrisTable enemy = enemyLogic_.getTable();
+	selfLogic_.changeTable(enemy);
+	enemyLogic_.changeTable(self);
+}
+
+void
+Warrior::skillHigh()
+{
+	selfLogic_.clearTable();
+}
+
+void
+Mage::skillLow()
+{
+	enemyLogic_.addPlusLine();
+}
+
+void
+Mage::skillMedium()
+{
+	Logic::TetrisTable self = selfLogic_.getTable();
+	Logic::TetrisTable enemy = enemyLogic_.getTable();
+	selfLogic_.changeTable(enemy);
+	enemyLogic_.changeTable(self);
+}
+
+void
+Mage::skillHigh()
+{
+	selfLogic_.clearTable();
 }
