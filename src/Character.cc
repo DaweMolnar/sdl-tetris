@@ -1,4 +1,5 @@
 #include "Character.hh"
+#include <string>
 
 void
 Character::doSpecial() {
@@ -34,4 +35,10 @@ void
 BetaCharacter::skillHigh()
 {
 	selfLogic_.clearTable();
+}
+
+std::array<std::string, 3>
+BetaCharacter::getSpecials()
+{
+	return {{"1 Wind","2 Shove","3 Copy"}};
 }

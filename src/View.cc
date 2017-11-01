@@ -185,11 +185,11 @@ View::renderSpecial(Character& character, const unsigned topleftX, const unsigne
 	SDL_Rect destination;
 	destination.x = topleftX;
 	destination.y = topleftY;
-	renderText(color, destination, "1 Shuffle");
-	destination.y += 20;
-	renderText(color, destination, "2 Shuffle");
-	destination.y += 20;
-	renderText(color, destination, "3 Shuffle");
+	auto specials = character.getSpecials();
+	for (auto special : specials) {
+		renderText(color, destination, special);
+		destination.y += 20;
+	}
 }
 
 void

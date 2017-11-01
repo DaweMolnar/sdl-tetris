@@ -10,6 +10,7 @@ public:
 	
 	void doSpecial();
 	
+	virtual std::array<std::string, 3> getSpecials()=0;
 	virtual char const* getAvatar()=0; 
 protected:
 	virtual void skillLow()=0;
@@ -27,7 +28,8 @@ public:
 	char const* getAvatar() override { return "img/betachar.png"; }
 
 private:
-	virtual void skillLow() override;
-	virtual void skillMedium() override;
-	virtual void skillHigh() override;
+	void skillLow() override;
+	void skillMedium() override;
+	void skillHigh() override;
+	std::array<std::string, 3> getSpecials() override;
 };
