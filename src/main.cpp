@@ -16,7 +16,7 @@ int main(int argc, char *args[])
 		player2.setEnemy(player1);
 		BetaCharacter character1(player1, player2);
 		BetaCharacter character2(player2, player1);
-		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, character1.getAvatar(), character2.getAvatar());
+		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, character1, character2);
 		GameLoop game(player1, player2, view, character1, character2, GameType::AI);
 		game.loop();
 	} catch (const std::exception& e) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logic.hh"
+#include "Character.hh"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -22,7 +23,7 @@ protected:
 
 class View : public ViewInterface {
 public:
-	View(Logic& logic1, Logic& logic2, const char* player1Avatar, const char* player2Avatar);
+	View(Logic& logic1, Logic& logic2, Character& player1Character, Character& player2Character);
 	~View();
 	void render() override;
 
@@ -33,6 +34,7 @@ private:
 	void renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY);
 	void renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY);
 	void renderText(const SDL_Color& color, SDL_Rect& destination, const std::string& text);
+	void renderSpecial(Character& character, const unsigned topleftX, const unsigned topleftY);
 	
 	SDL_Window* window_;
 	SDL_Renderer* ren_;
@@ -42,4 +44,6 @@ private:
 	SDL_Texture* blockTexture_;
 	SDL_Texture* player1Avatar_;
 	SDL_Texture* player2Avatar_;
+	Character& character1_;
+	Character& character2_;
 };

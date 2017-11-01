@@ -10,8 +10,10 @@ static const unsigned table2Y = 24;
 static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
-View::View(Logic& logic1, Logic& logic2, const char* player1Avatar, const char* player2Avatar)
+View::View(Logic& logic1, Logic& logic2, Character& player1Character, Character& player2Character)
 : ViewInterface(logic1, logic2)
+, character1_(player1Character)
+, character2_(player2Character)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
@@ -37,11 +39,11 @@ View::View(Logic& logic1, Logic& logic2, const char* player1Avatar, const char* 
 	if (blockTexture_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	player1Avatar_ = IMG_LoadTexture(ren_, player1Avatar);
+	player1Avatar_ = IMG_LoadTexture(ren_, player1Character.getAvatar());
 	if (player1Avatar_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	player2Avatar_ = IMG_LoadTexture(ren_, player2Avatar);
+	player2Avatar_ = IMG_LoadTexture(ren_, player2Character.getAvatar());
 	if (player2Avatar_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
@@ -177,6 +179,20 @@ View::renderAvatar(SDL_Texture* texture, const unsigned topleftX, const unsigned
 }
 
 void
+View::renderSpecial(Character& character, const unsigned topleftX, const unsigned topleftY)
+{
+	SDL_Color color = { 255, 255, 255, 255 };
+	SDL_Rect destination;
+	destination.x = topleftX;
+	destination.y = topleftY;
+	renderText(color, destination, "1 Shuffle");
+	destination.y += 20;
+	renderText(color, destination, "2 Shuffle");
+	destination.y += 20;
+	renderText(color, destination, "3 Shuffle");
+}
+
+void
 View::render()
 {
 	SDL_RenderClear(ren_);
@@ -196,6 +212,10 @@ View::render()
 
 	renderAvatar(player1Avatar_, 410, 290);
 	renderAvatar(player2Avatar_, 409 + table2X - table1X, 290);
+	
+	renderSpecial(character1_, 415, 495);
+	renderSpecial(character2_, 415 + table2X - table1X, 495);
+
 	SDL_RenderPresent(ren_);
 }
 void
