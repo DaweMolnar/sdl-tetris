@@ -10,8 +10,10 @@ static const unsigned table2Y = 24;
 static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
-View::View(Logic& logic1, Logic& logic2)
+View::View(Logic& logic1, Logic& logic2, Character& player1Character, Character& player2Character)
 : ViewInterface(logic1, logic2)
+, character1_(player1Character)
+, character2_(player2Character)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		throw std::runtime_error(SDL_GetError());
@@ -35,6 +37,14 @@ View::View(Logic& logic1, Logic& logic2)
 	font_ = TTF_OpenFont("sample.ttf", 20);
 	blockTexture_ = IMG_LoadTexture(ren_, "img/blocks.png");
 	if (blockTexture_ == 0) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	player1Avatar_ = IMG_LoadTexture(ren_, player1Character.getAvatar());
+	if (player1Avatar_ == 0) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	player2Avatar_ = IMG_LoadTexture(ren_, player2Character.getAvatar());
+	if (player2Avatar_ == 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
@@ -138,23 +148,48 @@ View::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, c
 	}
 }
 void
-View::renderScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderMana(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
 	destination.x = topleftX;
 	destination.y = topleftY;
-	renderText(color, destination, std::to_string(logic.getScore()));
+	renderText(color, destination, std::to_string(logic.getMana()));
 }
 
 void
-View::renderHighScore(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderWins(Logic& logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
 	destination.x = topleftX;
 	destination.y = topleftY;
-	renderText(color, destination, std::to_string(logic.highScore()));
+	renderText(color, destination, std::to_string(logic.gamesWon()));
+}
+
+void
+View::renderAvatar(SDL_Texture* texture, const unsigned topleftX, const unsigned topleftY)
+{
+	SDL_Rect dest;
+	dest.x = topleftX;
+	dest.y = topleftY;
+	dest.w = 100;
+	dest.h = 150;
+	SDL_RenderCopy(ren_, texture, NULL, &dest);
+}
+
+void
+View::renderSpecial(Character& character, const unsigned topleftX, const unsigned topleftY)
+{
+	SDL_Color color = { 255, 255, 255, 255 };
+	SDL_Rect destination;
+	destination.x = topleftX;
+	destination.y = topleftY;
+	auto specials = character.getSpecials();
+	for (auto special : specials) {
+		renderText(color, destination, special);
+		destination.y += 20;
+	}
 }
 
 void
@@ -169,11 +204,18 @@ View::render()
 	renderTable(logicPlayer2_, blockTexture_, table2X, table2Y);
 	renderNextShape(logicPlayer2_, blockTexture_, table2X, table2Y);
 
-	renderScore(logicPlayer1_, 420, 150);
-	renderScore(logicPlayer2_, 420 + table2X - table1X, 150);
+	renderMana(logicPlayer1_, 420, 150);
+	renderMana(logicPlayer2_, 420 + table2X - table1X, 150);
 
-	renderHighScore(logicPlayer1_, 420, 225);
-	renderHighScore(logicPlayer2_, 420 + table2X - table1X, 225);
+	renderWins(logicPlayer1_, 420, 225);
+	renderWins(logicPlayer2_, 420 + table2X - table1X, 225);
+
+	renderAvatar(player1Avatar_, 410, 290);
+	renderAvatar(player2Avatar_, 409 + table2X - table1X, 290);
+	
+	renderSpecial(character1_, 415, 495);
+	renderSpecial(character2_, 415 + table2X - table1X, 495);
+
 	SDL_RenderPresent(ren_);
 }
 void

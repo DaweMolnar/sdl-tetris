@@ -85,8 +85,6 @@ public:
 	bool finished();
 	void rotate();
 
-	size_t getScore() { return currentScore_; }
-	size_t highScore() { return highScore_; }
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
 	void clearMana() { currentMana_ = 0; }
@@ -116,8 +114,6 @@ private:
 	TetrisTable landedTable_;
 	bool gameFailed_ = false;
 	size_t gamesWon_ = 0;
-	size_t currentScore_ = 0;
-	size_t highScore_ = 0;
 	size_t currentMana_ = 0;
 	Logic* enemy_ = nullptr;
 };
