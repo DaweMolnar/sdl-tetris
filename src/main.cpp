@@ -11,12 +11,12 @@ int main(int argc, char *args[])
 {
 	srand((unsigned)time(NULL));
 	try {
-		tclap::CmdLine cmd("Multiplayer tetris", ' ', version());
-		tclap::ValueArg<char> char1("c1", "character-1", "Player 1 character", false, "n", "name", cmd);
-		tclap::ValueArg<char> char2("c2", "character-2", "Player 1 character", false, "m", "name", cmd);
-		tclap::SwitchArg localgame("l", "local-game", "Local multiplayer", cmd, false);
-		tclap::SwitchArg aigame("a", "ai-game", "Against AI", cmd, false);
-		tclap::ValueArg<std::string> networkgame("n", "enemy-addr", "Netwrok game enemy address", false, {"tcp://127.0.0.1:4242"}, "address", cmd);
+		TCLAP::CmdLine cmd("Multiplayer tetris", ' ', version());
+		TCLAP::ValueArg<char> char1("c1", "character-1", "Player 1 character", false, "n", "name", cmd);
+		TCLAP::ValueArg<char> char2("c2", "character-2", "Player 1 character", false, "m", "name", cmd);
+		TCLAP::SwitchArg localgame("l", "local-game", "Local multiplayer", cmd, false);
+		TCLAP::SwitchArg aigame("a", "ai-game", "Against AI", cmd, false);
+		TCLAP::ValueArg<std::string> networkgame("n", "enemy-addr", "Netwrok game enemy address", false, {"tcp://127.0.0.1:4242"}, "address", cmd);
 		
 		cmd.parse(argc, argv);
 		
