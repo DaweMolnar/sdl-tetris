@@ -7,7 +7,7 @@
 #include <time.h>
 #include <tclap/CmdLine.h>
 
-int main(int argc, char *args[])
+int main(int argc, char *argv[])
 {
 	srand((unsigned)time(NULL));
 	try {
