@@ -5,6 +5,7 @@
 #include <exception>
 #include <iostream>
 #include <time.h>
+#include <tclap/CmdLine.h>
 
 int main(int argc, char *args[])
 {
