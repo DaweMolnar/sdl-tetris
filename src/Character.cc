@@ -15,6 +15,7 @@ Character::doSpecial() {
 	selfLogic_.clearMana();
 }
 
+
 void
 Ninja::skillLow()
 {
@@ -39,7 +40,7 @@ Ninja::skillHigh()
 void
 Warrior::skillLow()
 {
-	enemyLogic_.addPlusLine();
+	selfLogic_.removeTopLines(4);
 }
 
 void
@@ -60,7 +61,7 @@ Warrior::skillHigh()
 void
 Mage::skillLow()
 {
-	enemyLogic_.addPlusLine();
+	for (int i = 0; i < 4; i++) selfLogic_.removeLine();
 }
 
 void
