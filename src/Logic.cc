@@ -178,3 +178,31 @@ Logic::addPlusLine()
 		else landedTable_.at(lastLine).at(i) = Color::grey;
 	}
 }
+
+void
+Logic::removeLine()
+{
+	int last = landedTable_.size() - 1;
+	for (size_t i = 0; i < landedTable_.at(last).size(); i++) {
+		landedTable_.at(last).at(i) = Color::none;
+	}
+	for (size_t i = landedTable_.size() - 1; i > 0; i--) {
+		landedTable_.at(i - 1).swap(landedTable_.at(i));
+	}
+}
+
+void
+Logic::removeTopLines(int lines)
+{
+	int firstNonEmpty = 0;
+	for (firstNonEmpty = 0 ; firstNonEmpty < landedTable_.size(); firstNonEmpty++) {
+		if (std::find_if_not(landedTable_.at(firstNonEmpty).begin(), landedTable_.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != landedTable_.at(firstNonEmpty).end()) break;
+	}
+	for (size_t i = 0; i < lines; i++) {
+		if (firstNonEmpty >= landedTable_.size()) return;
+		for (size_t i = 0; i < landedTable_.at(firstNonEmpty).size(); i++) {
+			landedTable_.at(firstNonEmpty).at(i) = Color::none;
+		}
+		firstNonEmpty++;
+	}
+}
