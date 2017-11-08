@@ -16,6 +16,9 @@ class Forwarder:
     def removeClient(self, client):
         self.clients.remove(client)
 
+    def acceptMore(self):
+        return len(self.clients) < 2
+
 class ClientThread(threading.Thread):
 
     def __init__(self,ip,port,clientsocket,forwarder):
@@ -52,8 +55,10 @@ while True:
     tcpsock.listen(4)
     print "Listening for incoming connections..."
     (clientsock, (ip, port)) = tcpsock.accept()
-
-    #pass clientsock to the ClientThread thread object being created
+    if (not forwarder.acceptMore()):
+        print "New connection dropped because of connection limit from [%s:%s]"%(ip, port)
+        clientsock.close()
+        continue
     newthread = ClientThread(ip, port, clientsock, forwarder)
     forwarder.addClient(newthread)
     newthread.start()
