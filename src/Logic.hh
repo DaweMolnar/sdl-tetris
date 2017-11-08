@@ -101,7 +101,7 @@ public:
 	void removeTopLines(int lines);
 	void clearTable() { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
-
+	void generateNewCurrentShape() { currentShape_ = std::make_unique<Tetromino>(); }
 private:
 
 	void clear();

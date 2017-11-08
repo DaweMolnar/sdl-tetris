@@ -19,12 +19,14 @@ Character::doSpecial() {
 void
 Ninja::skillLow()
 {
+	//TODO wind
 	enemyLogic_.addPlusLine();
 }
 
 void
 Ninja::skillMedium()
 {
+	//TODO move bottom 2
 	Logic::TetrisTable self = selfLogic_.getTable();
 	Logic::TetrisTable enemy = enemyLogic_.getTable();
 	selfLogic_.changeTable(enemy);
@@ -34,7 +36,8 @@ Ninja::skillMedium()
 void
 Ninja::skillHigh()
 {
-	selfLogic_.clearTable();
+	Logic::TetrisTable enemy = enemyLogic_.getTable();
+	selfLogic_.changeTable(enemy);
 }
 
 void
@@ -46,16 +49,16 @@ Warrior::skillLow()
 void
 Warrior::skillMedium()
 {
-	Logic::TetrisTable self = selfLogic_.getTable();
-	Logic::TetrisTable enemy = enemyLogic_.getTable();
-	selfLogic_.changeTable(enemy);
-	enemyLogic_.changeTable(self);
+	for (int i = 0; i < 5; i++) enemyLogic_.addPlusLine();
 }
 
 void
 Warrior::skillHigh()
 {
-	selfLogic_.clearTable();
+	Logic::TetrisTable self = selfLogic_.getTable();
+	Logic::TetrisTable enemy = enemyLogic_.getTable();
+	selfLogic_.changeTable(enemy);
+	enemyLogic_.changeTable(self);
 }
 
 void
@@ -67,14 +70,26 @@ Mage::skillLow()
 void
 Mage::skillMedium()
 {
-	Logic::TetrisTable self = selfLogic_.getTable();
-	Logic::TetrisTable enemy = enemyLogic_.getTable();
-	selfLogic_.changeTable(enemy);
-	enemyLogic_.changeTable(self);
+	selfLogic_.generateNewCurrentShape();
 }
 
 void
 Mage::skillHigh()
 {
-	selfLogic_.clearTable();
+	Logic::TetrisTable enemy = enemyLogic_.getTable();
+	int firstNonEmpty = 0;
+	for (firstNonEmpty = 0 ; firstNonEmpty < enemy.size(); firstNonEmpty++) {
+		if (std::find_if_not(enemy.at(firstNonEmpty).begin(), enemy.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != enemy.at(firstNonEmpty).end()) break;
+	}
+
+	for (size_t i = firstNonEmpty; i < enemy.size(); i++) {
+		for (size_t j = 0; j < enemy.at(i).size(); j++) {
+			if (enemy.at(i).at(j) == Color::none) {
+				enemy.at(i).at(j) = Color::grey;
+			} else {
+				enemy.at(i).at(j) = Color::none;
+			}
+		}
+	}
+	enemyLogic_.changeTable(enemy);
 }
