@@ -1,5 +1,15 @@
 #include "Character.hh"
 
+static int
+getFirstNonEmpty(Logic::TetrisTable table)
+{
+	int firstNonEmpty = 0;
+	for (firstNonEmpty = 0 ; firstNonEmpty < table.size(); firstNonEmpty++) {
+		if (std::find_if_not(table.at(firstNonEmpty).begin(), table.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != table.at(firstNonEmpty).end()) break;
+	}
+	return firstNonEmpty;
+}
+
 void
 Character::doSpecial() {
 	size_t mana = selfLogic_.getMana();
@@ -19,8 +29,22 @@ Character::doSpecial() {
 void
 Ninja::skillLow()
 {
-	//TODO wind
-	enemyLogic_.addPlusLine();
+	Logic::TetrisTable self = selfLogic_.getTable();
+	int firstNonEmpty = getFirstNonEmpty(self);
+	for (size_t i = firstNonEmpty; i < self.size(); i++) {
+		for (int j = self.at(i).size() - 1; j >= 0; j--) {
+			if (self.at(i).at(j) == Color::none) {
+				int cellToSwitch = j;
+				for (; cellToSwitch >= 0; cellToSwitch--) {
+					if (self.at(i).at(cellToSwitch) != Color::none) break;
+				}
+				if (cellToSwitch < 0) break;
+				self.at(i).at(j) = self.at(i).at(cellToSwitch);
+				self.at(i).at(cellToSwitch) = Color::none;
+			}
+		}
+	}
+	selfLogic_.changeTable(self);
 }
 
 void
@@ -77,11 +101,7 @@ void
 Mage::skillHigh()
 {
 	Logic::TetrisTable enemy = enemyLogic_.getTable();
-	int firstNonEmpty = 0;
-	for (firstNonEmpty = 0 ; firstNonEmpty < enemy.size(); firstNonEmpty++) {
-		if (std::find_if_not(enemy.at(firstNonEmpty).begin(), enemy.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != enemy.at(firstNonEmpty).end()) break;
-	}
-
+	int firstNonEmpty = getFirstNonEmpty(enemy);
 	for (size_t i = firstNonEmpty; i < enemy.size(); i++) {
 		for (size_t j = 0; j < enemy.at(i).size(); j++) {
 			if (enemy.at(i).at(j) == Color::none) {
