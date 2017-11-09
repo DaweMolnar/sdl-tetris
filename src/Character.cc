@@ -50,11 +50,8 @@ Ninja::skillLow()
 void
 Ninja::skillMedium()
 {
-	//TODO move bottom 2
-	Logic::TetrisTable self = selfLogic_.getTable();
-	Logic::TetrisTable enemy = enemyLogic_.getTable();
-	selfLogic_.changeTable(enemy);
-	enemyLogic_.changeTable(self);
+	for (int i = 0; i < 2; i++) selfLogic_.removeLine();
+	for (int i = 0; i < 2; i++) enemyLogic_.addPlusLine();
 }
 
 void
