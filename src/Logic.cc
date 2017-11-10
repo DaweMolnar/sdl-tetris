@@ -105,6 +105,10 @@ Logic::landCurrent()
 	landedTable_ = getTableWithShape();
 	resetCurrent();
 	cleanFullLines();
+	while(linesToAdd_) {
+		linesToAdd_--;
+		addLine();
+	}
 }
 
 void
@@ -165,7 +169,7 @@ Logic::rotate()
 }
 
 void
-Logic::addPlusLine()
+Logic::addLine()
 {
 	for (size_t i = 0; i < landedTable_.size() - 1; i++) {
 		landedTable_.at(i + 1).swap(landedTable_.at(i));
