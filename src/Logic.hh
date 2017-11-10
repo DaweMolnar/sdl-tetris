@@ -97,9 +97,11 @@ public:
 	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
 
 	void addPlusLine();
+	void removeLine();
+	void removeTopLines(int lines);
 	void clearTable() { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
-
+	void generateNewCurrentShape() { currentShape_ = std::make_unique<Tetromino>(); }
 private:
 
 	void clear();

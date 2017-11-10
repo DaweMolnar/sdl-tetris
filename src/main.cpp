@@ -12,13 +12,13 @@ makeCharacter(char type, Logic& self, Logic& enemy)
 {
 	switch(type) {
 		case 'n':
-			return std::make_shared<BetaCharacter>(self,enemy);
+			return std::make_shared<Ninja>(self,enemy);
 		case 'm':
-			return std::make_shared<BetaCharacter>(self,enemy);
+			return std::make_shared<Mage>(self,enemy);
 		case 'w':
-			return std::make_shared<BetaCharacter>(self,enemy);
+			return std::make_shared<Warrior>(self,enemy);
 		default:
-			return std::make_shared<BetaCharacter>(self,enemy);
+			throw std::runtime_error("Given character type is not valid");
 	}
 }
 
@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
 		Logic player2;
 		player1.setEnemy(player2);
 		player2.setEnemy(player1);
+
 		std::shared_ptr<Character> character1 = makeCharacter(char1.getValue(), player1, player2);
 		std::shared_ptr<Character> character2 = makeCharacter(char2.getValue(), player2, player1);
 		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, *character1, *character2);

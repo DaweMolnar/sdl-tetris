@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logic.hh"
+#include <string>
 
 class Character {
 public:
@@ -21,15 +22,41 @@ protected:
 	Logic& enemyLogic_;
 };
 
-class BetaCharacter : public Character {
+class Ninja : public Character {
 public:
-	BetaCharacter(Logic& selfLogic, Logic& enemyLogic)
+	Ninja(Logic& selfLogic, Logic& enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
-	char const* getAvatar() override { return "img/betachar.png"; }
+	char const* getAvatar() override { return "img/ninjachar.png"; }
 
 private:
 	void skillLow() override;
 	void skillMedium() override;
 	void skillHigh() override;
-	std::array<std::string, 3> getSpecials() override;
+	std::array<std::string, 3> getSpecials() override { return {{"1 Wind","2 Shove","3 Copy"}}; }
+};
+
+class Mage : public Character {
+public:
+	Mage(Logic& selfLogic, Logic& enemyLogic)
+	: Character(selfLogic, enemyLogic) {};
+	char const* getAvatar() override { return "img/magechar.png"; }
+
+private:
+	void skillLow() override;
+	void skillMedium() override;
+	void skillHigh() override;
+	std::array<std::string, 3> getSpecials() override { return {{"1 Erase","2 Transform","3 Mirror"}}; }
+};
+
+class Warrior : public Character {
+public:
+	Warrior(Logic& selfLogic, Logic& enemyLogic)
+	: Character(selfLogic, enemyLogic) {};
+	char const* getAvatar() override { return "img/warriorchar.png"; }
+
+private:
+	void skillLow() override;
+	void skillMedium() override;
+	void skillHigh() override;
+	std::array<std::string, 3> getSpecials() override { return {{"1 Slice","2 Raise","3 Swap"}}; }
 };
