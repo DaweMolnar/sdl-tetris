@@ -96,10 +96,12 @@ public:
 
 	void setEnemy(Logic& enemy) { enemy_ = &enemy; }
 
-	void addPlusLine();
+	void addPlusLine() { linesToAdd_++; }
+	void removeLine();
+	void removeTopLines(int lines);
 	void clearTable() { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
-
+	void generateNewCurrentShape() { currentShape_ = std::make_unique<Tetromino>(); }
 private:
 
 	void clear();
@@ -108,6 +110,7 @@ private:
 	void cleanFullLines();
 	void cleanLine(size_t line);
 	void clearStats();
+	void addLine();
 
 	std::unique_ptr<Tetromino> currentShape_;
 	std::unique_ptr<Tetromino> nextShape_;
@@ -115,6 +118,7 @@ private:
 	bool gameFailed_ = false;
 	size_t gamesWon_ = 0;
 	size_t currentMana_ = 0;
+	size_t linesToAdd_ = 0;
 	Logic* enemy_ = nullptr;
 };
 
