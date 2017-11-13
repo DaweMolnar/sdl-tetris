@@ -12,6 +12,9 @@ class Forwarder:
 
     def addClient(self, client):
         self.clients.append(client)
+        if (not self.acceptMore()):
+            for client in self.clients:
+                client.send("start")
 
     def removeClient(self, client):
         self.clients.remove(client)

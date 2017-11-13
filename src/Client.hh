@@ -10,5 +10,5 @@ private:
 public:
 	TcpClient(std::string, int);
 	void send(const std::string&);
-	std::string receive(int, int);
+	std::string receive(int wait_timeout = 5, int size = 512);
 };

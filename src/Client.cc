@@ -4,18 +4,25 @@
 #include <sys/select.h>
 #include <sys/types.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 TcpClient::TcpClient(std::string address, int port)
 {
 	sock = socket(AF_INET , SOCK_STREAM, 0);
 	if (sock == -1) throw std::runtime_error("Could not create socket");
+	int rv = fcntl(sock, F_SETFL, O_NONBLOCK); // socket set to NONBLOCK
+	if(rv < 0) throw std::runtime_error("nonblock failed");
 	if(inet_addr(address.c_str()) == -1) {
 		server.sin_addr.s_addr = inet_addr( address.c_str() );
 	}
 	server.sin_family = AF_INET;
 	server.sin_port = htons( port );
-	if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)	{
-		throw std::runtime_error("Could not connect to given address");
+	while (true) {
+		if (connect(sock, (struct sockaddr *)&server , sizeof(server)) < 0)	{
+			if (errno != EAGAIN) {
+				throw std::runtime_error("Could not connect to given address");
+			}
+		} else break;
 	}
 }
 
@@ -25,13 +32,13 @@ void TcpClient::send(const std::string& data)
 		throw std::runtime_error("Could not send data");
 	}
 }
- 
-std::string TcpClient::receive(int wait_timeout = 5, int size = 512)
+
+std::string TcpClient::receive(int wait_timeout, int size)
 {
 	fd_set set;
 	struct timeval timeout;
-	FD_ZERO(&set); /* clear the set */
-	FD_SET(sock, &set); /* add our file descriptor to the set */
+	FD_ZERO(&set);
+	FD_SET(sock, &set);
 	timeout.tv_sec = wait_timeout;
 	timeout.tv_usec = 0;
 	int rv = select(sock + 1, &set, nullptr, nullptr, &timeout);

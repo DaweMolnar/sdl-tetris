@@ -3,6 +3,7 @@
 #include "ControllerInterface.hh"
 #include "View.hh"
 #include "Character.hh"
+#include "Client.hh"
 
 #include <SDL.h>
 
@@ -22,6 +23,7 @@ public:
 			, Character& character1
 			, Character& character2
 			, GameType type
+			, std::shared_ptr<TcpClient> client
 	);
 	void loop();
 

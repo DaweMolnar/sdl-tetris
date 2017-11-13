@@ -4,7 +4,7 @@
 #include "KeyMap.hh"
 #include <memory>
 
-GameLoop::GameLoop(Logic& logic1, Logic& logic2, std::shared_ptr<ViewInterface> view, Character& character1, Character& character2, GameType type)
+GameLoop::GameLoop(Logic& logic1, Logic& logic2, std::shared_ptr<ViewInterface> view, Character& character1, Character& character2, GameType type, std::shared_ptr<TcpClient> client)
 : logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
 , view_(view)

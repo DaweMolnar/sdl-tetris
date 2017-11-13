@@ -1,6 +1,7 @@
 #include "GameLoop.hh"
 #include "View.hh"
 #include "Character.hh"
+#include "Client.hh"
 
 #include <exception>
 #include <iostream>
@@ -44,13 +45,29 @@ int main(int argc, char *argv[])
 		std::shared_ptr<Character> character2 = makeCharacter(char2.getValue(), player2, player1);
 		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, *character1, *character2);
 
-		GameType type;
-		if (localgame.getValue()) type = GameType::TWOPLAYER;
-		else if (aigame.getValue()) type = GameType::AI;
-		//TODO else if (networkgame.getValue())
-		else throw std::runtime_error("No game type selected. Please select a game type");
+		std::shared_ptr<TcpClient> client;
+		std::string address = networkgame.getValue();
 
-		GameLoop game(player1, player2, view, *character1, *character2, type);
+		GameType type;
+		if (localgame.getValue()) {
+			type = GameType::TWOPLAYER;
+		}else if (aigame.getValue()) {
+			type = GameType::AI;
+		}else if (!address.empty()) {
+			auto delim = address.find(":");
+			if (delim == std::string::npos) throw std::runtime_error("Wrong format for IP address");
+			std::string ip = address.substr(0, delim);
+			std::string port = address.substr(delim+1);
+			std::cerr << "before" << std::endl;
+			client = std::make_shared<TcpClient>(ip, std::stoi(port));
+			std::string message = client->receive(0);
+			if (message != "start") throw std::runtime_error("Invalid game start message received");
+			type = GameType::NETWORK;
+		} else {
+			throw std::runtime_error("No game type selected. Please select a game type");
+		}
+
+		GameLoop game(player1, player2, view, *character1, *character2, type, client);
 		game.loop();
 	} catch (const std::exception& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;
