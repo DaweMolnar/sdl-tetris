@@ -55,12 +55,12 @@ int main(int argc, char *argv[])
 			type = GameType::AI;
 		}else if (!address.empty()) {
 			auto delim = address.find(":");
-			if (delim == std::string::npos) throw std::runtime_error("Wrong format for IP address");
+			if (delim == std::string::npos) throw std::runtime_error("Wrong format for connect address");
 			std::string ip = address.substr(0, delim);
 			std::string port = address.substr(delim+1);
-			std::cerr << "before" << std::endl;
 			client = std::make_shared<TcpClient>(ip, std::stoi(port));
-			std::string message = client->receive(0);
+			std::string message = client->receive(5);
+			if (message.empty()) throw std::runtime_error("Did not find any opponent");
 			if (message != "start") throw std::runtime_error("Invalid game start message received");
 			type = GameType::NETWORK;
 		} else {
