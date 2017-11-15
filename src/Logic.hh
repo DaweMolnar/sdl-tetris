@@ -98,7 +98,7 @@ public:
 
 	void addPlusLine() { linesToAdd_++; }
 	void removeLine();
-	void removeTopLines(int lines);
+	void removeTopLines(size_t lines);
 	void clearTable() { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
 	void generateNewCurrentShape() { currentShape_ = std::make_unique<Tetromino>(); }
