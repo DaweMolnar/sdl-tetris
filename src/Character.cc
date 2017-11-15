@@ -3,7 +3,7 @@
 static int
 getFirstNonEmpty(Logic::TetrisTable table)
 {
-	int firstNonEmpty = 0;
+	size_t firstNonEmpty = 0;
 	for (firstNonEmpty = 0 ; firstNonEmpty < table.size(); firstNonEmpty++) {
 		if (std::find_if_not(table.at(firstNonEmpty).begin(), table.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != table.at(firstNonEmpty).end()) break;
 	}
