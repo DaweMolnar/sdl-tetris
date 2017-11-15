@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import socket, threading
+import socket, threading, sys
 class Forwarder:
     def __init__(self):
         self.clients = []
@@ -12,6 +12,9 @@ class Forwarder:
 
     def addClient(self, client):
         self.clients.append(client)
+        if (not self.acceptMore()):
+            for client in self.clients:
+                client.send("start")
 
     def removeClient(self, client):
         self.clients.remove(client)
@@ -31,7 +34,6 @@ class ClientThread(threading.Thread):
 
     def run(self):
         print "Connection from : "+ip+":"+str(port)
-        clientsock.send("Welcome to the server")
         data = "dummydata"
         while len(data):
             data = self.csocket.recv(2048)
@@ -44,7 +46,7 @@ class ClientThread(threading.Thread):
         self.csocket.send(data)
 
 host = "0.0.0.0"
-port = 4242
+port = int(sys.argv[1])
 
 tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
