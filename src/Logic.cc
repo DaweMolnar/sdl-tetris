@@ -196,9 +196,9 @@ Logic::removeLine()
 }
 
 void
-Logic::removeTopLines(int lines)
+Logic::removeTopLines(size_t lines)
 {
-	int firstNonEmpty = 0;
+	size_t firstNonEmpty = 0;
 	for (firstNonEmpty = 0; firstNonEmpty < landedTable_.size(); firstNonEmpty++) {
 		if (std::find_if_not(landedTable_.at(firstNonEmpty).begin(), landedTable_.at(firstNonEmpty).end(), [](auto i) { return (i == Color::none); }) != landedTable_.at(firstNonEmpty).end()) break;
 	}
