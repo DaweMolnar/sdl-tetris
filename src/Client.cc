@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <netdb.h>
 #include <fcntl.h>
+#include <strings.h>
 
 TcpClient::TcpClient(std::string address, int port)
 {
