@@ -1,6 +1,7 @@
 #include "GameLoop.hh"
 #include "Ai.hh"
 #include "LocalController.hh"
+#include "NWController.hh"
 #include "KeyMap.hh"
 #include <memory>
 
