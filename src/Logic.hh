@@ -101,6 +101,7 @@ public:
 	void changeTable(TetrisTable& newTable) { resetCurrent(); landedTable_ = newTable; }
 
 protected:
+	void clear();
 	virtual void resetCurrent() = 0;
 	TetrisTable landedTable_;
 
@@ -112,6 +113,7 @@ protected:
 class PassiveLogic : public LogicInterface
 {
 public:
+	PassiveLogic() { clear(); }
 	std::shared_ptr<Tetromino> getNextShape() override { return nullptr; }
 	Tetromino& getCurrentShape() override { assert(false); }
 	TetrisTable getTableWithShape() override { return landedTable_; }
@@ -128,6 +130,7 @@ public:
 	void move(unsigned x, unsigned y) override {}
 	void rotate() override {}
 	void generateNewCurrentShape() override {}
+	void addPlusLine() override {}
 
 	bool canMoveTo(const Shape& shape, const Position& nextPos) override { assert(false); }
 	bool pointIsEmpty(unsigned x, unsigned y) override { assert(false); }
@@ -166,7 +169,6 @@ public:
 
 	bool pointIsEmpty(unsigned x, unsigned y) override;
 private:
-	void clear();
 	void landCurrent();
 	void resetCurrent() override;
 	void cleanFullLines();
