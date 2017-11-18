@@ -93,7 +93,7 @@ Logic::cleanFullLines()
 			}
 		}
 		if (complete) {
-			if (enemy_ != nullptr) enemy_->addPlusLine();
+			if (enemy_ != nullptr) enemy_->enemyClearedLine();
 			cleanLine(i);
 		}
 	}

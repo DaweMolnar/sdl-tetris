@@ -90,7 +90,8 @@ public:
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
 	void clearMana() { currentMana_ = 0; }
-	void addPlusLine() { linesToAdd_++; }
+	void enemyClearedLine() { linesToAdd_++; }
+	virtual void addPlusLine() = 0;
 
 	void changeTable(TetrisTable& newTable) { resetCurrent(); landedTable_ = newTable; }
 
@@ -126,6 +127,7 @@ public:
 	void clearTable() override { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos) override;
 	void generateNewCurrentShape() override { currentShape_ = std::make_unique<Tetromino>(); }
+	void addPlusLine() override { linesToAdd_++; }
 
 	bool pointIsEmpty(unsigned x, unsigned y) override;
 private:
