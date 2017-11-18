@@ -109,6 +109,36 @@ protected:
 	size_t currentMana_ = 0;
 };
 
+class PassiveLogic : public LogicInterface
+{
+public:
+	std::shared_ptr<Tetromino> getNextShape() override { return nullptr; }
+	Tetromino& getCurrentShape() override { assert(false); }
+	TetrisTable getTableWithShape() override { return landedTable_; }
+	TetrisTable getTable() override { return landedTable_; }
+
+	void newGame() override {}
+	void update() override {}
+
+	void setEnemy(std::shared_ptr<LogicInterface> enemy) override {}
+
+	void removeLine() override {}
+	void removeTopLines(size_t lines) override {}
+	void clearTable() override {}
+	void move(unsigned x, unsigned y) override {}
+	void rotate() override {}
+	void generateNewCurrentShape() override {}
+
+	bool canMoveTo(const Shape& shape, const Position& nextPos) override { assert(false); }
+	bool pointIsEmpty(unsigned x, unsigned y) override { assert(false); }
+	bool finished() override { return finished_; }
+
+	void setFinished(bool finished) { finished_ = finished; }
+private:
+	void resetCurrent() override {}
+	bool finished_ = false;
+};
+
 class Logic : public LogicInterface
 {
 public:
