@@ -17,8 +17,8 @@ class GameLoop
 {
 public:
 	GameLoop(
-			Logic& logic1
-			, Logic& logic2
+			std::shared_ptr<LogicInterface> logic1
+			, std::shared_ptr<LogicInterface> logic2
 			, std::shared_ptr<ViewInterface> view
 			, Character& character1
 			, Character& character2
@@ -30,8 +30,8 @@ public:
 private:
 	void handleEvents(const SDL_Event& event);
 	
-	Logic& logicPlayer1_; 
-	Logic& logicPlayer2_;
+	std::shared_ptr<LogicInterface> logicPlayer1_; 
+	std::shared_ptr<LogicInterface> logicPlayer2_;
 	std::shared_ptr<ViewInterface> view_;
 	std::unique_ptr<ControllerInterface> controlPlayer1_;
 	std::unique_ptr<ControllerInterface> controlPlayer2_;

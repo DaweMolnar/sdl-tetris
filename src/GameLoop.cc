@@ -4,7 +4,7 @@
 #include "KeyMap.hh"
 #include <memory>
 
-GameLoop::GameLoop(Logic& logic1, Logic& logic2, std::shared_ptr<ViewInterface> view, Character& character1, Character& character2, GameType type, std::shared_ptr<TcpClient> client)
+GameLoop::GameLoop(std::shared_ptr<LogicInterface> logic1, std::shared_ptr<LogicInterface> logic2, std::shared_ptr<ViewInterface> view, Character& character1, Character& character2, GameType type, std::shared_ptr<TcpClient> client)
 : logicPlayer1_(logic1)
 , logicPlayer2_(logic2)
 , view_(view)
@@ -46,8 +46,8 @@ void
 GameLoop::loop()
 {
 	while (run_) {
-		logicPlayer1_.update();
-		logicPlayer2_.update();
+		logicPlayer1_->update();
+		logicPlayer2_->update();
 		unsigned slowness = 50;
 		if (slowness < 1) slowness = 1;
 		for (size_t i = 0; i < slowness; i++) {
@@ -58,9 +58,9 @@ GameLoop::loop()
 			}
 			controlPlayer1_->tick();
 			controlPlayer2_->tick();
-			if (logicPlayer1_.finished() || logicPlayer2_.finished()) {
-				logicPlayer1_.newGame();
-				logicPlayer2_.newGame();
+			if (logicPlayer1_->finished() || logicPlayer2_->finished()) {
+				logicPlayer1_->newGame();
+				logicPlayer2_->newGame();
 			}
 			if (!run_) break;
 			SDL_Delay(1);

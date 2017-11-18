@@ -9,7 +9,7 @@
 #include <tclap/CmdLine.h>
 
 std::shared_ptr<Character>
-makeCharacter(char type, Logic& self, Logic& enemy)
+makeCharacter(char type, std::shared_ptr<LogicInterface> self, std::shared_ptr<LogicInterface> enemy)
 {
 	switch(type) {
 		case 'n':
@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
 		
 		cmd.parse(argc, argv);
 
-		Logic player1;
-		Logic player2;
-		player1.setEnemy(player2);
-		player2.setEnemy(player1);
+		std::shared_ptr<LogicInterface> player1 = std::make_shared<Logic>();
+		std::shared_ptr<LogicInterface> player2 = std::make_shared<Logic>();
+		player1->setEnemy(player2);
+		player2->setEnemy(player1);
 
 		std::shared_ptr<Character> character1 = makeCharacter(char1.getValue(), player1, player2);
 		std::shared_ptr<Character> character2 = makeCharacter(char2.getValue(), player2, player1);

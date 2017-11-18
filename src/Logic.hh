@@ -70,11 +70,16 @@ class LogicInterface
 public:
 	using TetrisTable = std::array<std::array<Color, TETRIS_ROW>, TETRIS_COL>;
 	virtual ~LogicInterface() {}
+	
+	virtual std::shared_ptr<Tetromino> getNextShape() = 0;
+	virtual Tetromino& getCurrentShape() = 0;
+	virtual TetrisTable getTableWithShape() = 0;
+	virtual TetrisTable getTable() = 0;
 
 	virtual void newGame() = 0;
 	virtual void update() = 0;
 
-	virtual void setEnemy(LogicInterface& enemy) = 0;
+	virtual void setEnemy(std::shared_ptr<LogicInterface> enemy) = 0;
 
 	virtual void removeLine() = 0;
 	virtual void removeTopLines(size_t lines) = 0;
@@ -110,23 +115,23 @@ public:
 	Logic();
 	~Logic();
 
-	Tetromino& getNextShape() { assert(nextShape_); return *nextShape_; }
-	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
-	TetrisTable getTableWithShape();
-	TetrisTable getTable() { return landedTable_; }
+	std::shared_ptr<Tetromino> getNextShape() override { return nextShape_; }
+	Tetromino& getCurrentShape() override { assert(currentShape_); return *currentShape_; }
+	TetrisTable getTableWithShape() override;
+	TetrisTable getTable() override { return landedTable_; }
 
 	void newGame() override;
 	void update() override;
 	void move(unsigned x, unsigned y) override;
 	bool finished() override;
 	void rotate() override;
-	void setEnemy(LogicInterface& enemy) override { enemy_ = &enemy; }
+	void setEnemy(std::shared_ptr<LogicInterface> enemy) override { enemy_ = enemy; }
 
 	void removeLine() override;
 	void removeTopLines(size_t lines) override;
 	void clearTable() override { clear(); }
 	bool canMoveTo(const Shape& shape, const Position& nextPos) override;
-	void generateNewCurrentShape() override { currentShape_ = std::make_unique<Tetromino>(); }
+	void generateNewCurrentShape() override { currentShape_ = std::make_shared<Tetromino>(); }
 	void addPlusLine() override { linesToAdd_++; }
 
 	bool pointIsEmpty(unsigned x, unsigned y) override;
@@ -139,8 +144,8 @@ private:
 	void clearStats();
 	void addLine();
 
-	std::unique_ptr<Tetromino> currentShape_;
-	std::unique_ptr<Tetromino> nextShape_;
+	std::shared_ptr<Tetromino> currentShape_;
+	std::shared_ptr<Tetromino> nextShape_;
 	bool gameFailed_ = false;
-	LogicInterface* enemy_ = nullptr;
+	std::shared_ptr<LogicInterface> enemy_;
 };

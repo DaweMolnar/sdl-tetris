@@ -5,7 +5,7 @@
 
 class Character {
 public:
-	Character(Logic& selfLogic, Logic& enemyLogic)
+	Character(std::shared_ptr<LogicInterface> selfLogic, std::shared_ptr<LogicInterface> enemyLogic)
 	: selfLogic_(selfLogic), enemyLogic_(enemyLogic) {}
 	virtual ~Character() {}
 	
@@ -18,13 +18,13 @@ protected:
 	virtual void skillMedium()=0;
 	virtual void skillHigh()=0;
 
-	Logic& selfLogic_;
-	Logic& enemyLogic_;
+	std::shared_ptr<LogicInterface> selfLogic_;
+	std::shared_ptr<LogicInterface> enemyLogic_;
 };
 
 class Ninja : public Character {
 public:
-	Ninja(Logic& selfLogic, Logic& enemyLogic)
+	Ninja(std::shared_ptr<LogicInterface> selfLogic, std::shared_ptr<LogicInterface> enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
 	char const* getAvatar() override { return "img/ninjachar.png"; }
 
@@ -37,7 +37,7 @@ private:
 
 class Mage : public Character {
 public:
-	Mage(Logic& selfLogic, Logic& enemyLogic)
+	Mage(std::shared_ptr<LogicInterface> selfLogic, std::shared_ptr<LogicInterface> enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
 	char const* getAvatar() override { return "img/magechar.png"; }
 
@@ -50,7 +50,7 @@ private:
 
 class Warrior : public Character {
 public:
-	Warrior(Logic& selfLogic, Logic& enemyLogic)
+	Warrior(std::shared_ptr<LogicInterface> selfLogic, std::shared_ptr<LogicInterface> enemyLogic)
 	: Character(selfLogic, enemyLogic) {};
 	char const* getAvatar() override { return "img/warriorchar.png"; }
 

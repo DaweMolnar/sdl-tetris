@@ -10,7 +10,7 @@ static const unsigned table2Y = 24;
 static const unsigned tableWidth = 385;
 static const unsigned tableHeight = 595;
 
-View::View(Logic& logic1, Logic& logic2, Character& player1Character, Character& player2Character)
+View::View(std::shared_ptr<LogicInterface> logic1, std::shared_ptr<LogicInterface> logic2, Character& player1Character, Character& player2Character)
 : ViewInterface(logic1, logic2)
 , character1_(player1Character)
 , character2_(player2Character)
@@ -114,11 +114,11 @@ getDest(unsigned row, unsigned col, const unsigned topleftX, const unsigned topl
 	return dest;
 }
 void
-View::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
+View::renderTable(std::shared_ptr<LogicInterface> logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
-	auto table = logic.getTableWithShape();
+	auto table = logic->getTableWithShape();
 	for (size_t i = 0; i < table.size(); i++) {
 		for (size_t j = 0; j < table.at(i).size(); j++) {
 			if (table[i][j] == Color::none) continue;
@@ -130,17 +130,18 @@ View::renderTable(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const
 }
 
 void
-View::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
+View::renderNextShape(std::shared_ptr<LogicInterface> logic, SDL_Texture* tex, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Rect sect;
 	SDL_Rect dest;
 	dest.w = tableWidth / TETRIS_ROW / 2;
 	dest.h = tableHeight / TETRIS_COL / 2;
-	auto shape = logic.getNextShape();
-	for (size_t i = 0; i < shape.shape.size(); i++) {
-		for (size_t j = 0; j < shape.shape.at(i).size(); j++) {
-			if (shape.shape[i][j] == Color::none) continue;
-			sect = getSect(shape.shape[i][j]);
+	auto shape = logic->getNextShape();
+	if (!shape) return;
+	for (size_t i = 0; i < shape->shape.size(); i++) {
+		for (size_t j = 0; j < shape->shape.at(i).size(); j++) {
+			if (shape->shape[i][j] == Color::none) continue;
+			sect = getSect(shape->shape[i][j]);
 			dest.x = topleftX + dest.w * j + 400;
 			dest.y = topleftY + dest.h * i + 30;
 			SDL_RenderCopy(ren_, tex, &sect, &dest);
@@ -148,23 +149,23 @@ View::renderNextShape(Logic& logic, SDL_Texture* tex, const unsigned topleftX, c
 	}
 }
 void
-View::renderMana(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderMana(std::shared_ptr<LogicInterface> logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
 	destination.x = topleftX;
 	destination.y = topleftY;
-	renderText(color, destination, std::to_string(logic.getMana()));
+	renderText(color, destination, std::to_string(logic->getMana()));
 }
 
 void
-View::renderWins(Logic& logic, const unsigned topleftX, const unsigned topleftY)
+View::renderWins(std::shared_ptr<LogicInterface> logic, const unsigned topleftX, const unsigned topleftY)
 {
 	SDL_Color color = { 255, 255, 255, 255 };
 	SDL_Rect destination;
 	destination.x = topleftX;
 	destination.y = topleftY;
-	renderText(color, destination, std::to_string(logic.gamesWon()));
+	renderText(color, destination, std::to_string(logic->gamesWon()));
 }
 
 void
