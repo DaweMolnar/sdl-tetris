@@ -210,3 +210,10 @@ Logic::removeTopLines(size_t lines)
 		firstNonEmpty++;
 	}
 }
+
+bool
+Logic::pointIsEmpty(unsigned x, unsigned y)
+{
+	if (x >= landedTable_.size() || y >= landedTable_.at(0).size()) return false;
+	return (landedTable_.at(x).at(y) == Color::none);
+}
