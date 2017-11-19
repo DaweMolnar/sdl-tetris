@@ -26,5 +26,7 @@ NWSController::tick()
 void
 NWCController::tick()
 {
+	std::string message = client_->receive(0);
+	if (message.empty()) return;
 	//TODO receive, and parse messages, send plusLines from logic
 }
