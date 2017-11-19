@@ -13,7 +13,7 @@ const
 				int lineNeg = (TETRIS_COL - (pos.second + i));
 				score += lineNeg;
 				unsigned p = 1;
-				while (logic_.pointIsEmpty(i+p, j)) {
+				while (logic_->pointIsEmpty(i+p, j)) {
 					score += 1;
 					p++;
 				}
@@ -26,8 +26,8 @@ const
 void
 Ai::tick()
 {
-	auto originShape = logic_.getCurrentShape().shape;
-	auto currentPos = logic_.getCurrentShape().topLeft;
+	auto originShape = logic_->getCurrentShape().shape;
+	auto currentPos = logic_->getCurrentShape().topLeft;
 
 	int minLogicScore = 999;
 	Position wantedPos;
@@ -38,10 +38,10 @@ Ai::tick()
 		auto shape = originShape;
 		for (int rotation = 0; rotation < 4; rotation++) {
 			currentPos.second = 0;
-			if (!logic_.canMoveTo(shape, currentPos)) continue;
+			if (!logic_->canMoveTo(shape, currentPos)) continue;
 			for (size_t j = 0; j < TETRIS_COL; j++) {
 				currentPos.second = j;
-				if (!logic_.canMoveTo(shape, currentPos)) break;
+				if (!logic_->canMoveTo(shape, currentPos)) break;
 				auto score = getLogicScore(currentPos, shape);
 				if (minLogicScore > score) {
 					minLogicScore = score;
@@ -54,8 +54,8 @@ Ai::tick()
 		}
 	}
 
-	if (wantedRotation != 0) { logic_.rotate();}
-	int move = wantedPos.first - logic_.getCurrentShape().topLeft.first;
-	if (move != 0) logic_.move(move < 1 ? -1 : 1, 0);
-	else logic_.move(0, 1);
+	if (wantedRotation != 0) { logic_->rotate();}
+	int move = wantedPos.first - logic_->getCurrentShape().topLeft.first;
+	if (move != 0) logic_->move(move < 1 ? -1 : 1, 0);
+	else logic_->move(0, 1);
 }
