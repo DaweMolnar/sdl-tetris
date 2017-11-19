@@ -9,7 +9,7 @@
 #include <tclap/CmdLine.h>
 
 std::shared_ptr<Character>
-makeCharacter(char type, Logic& self, Logic& enemy)
+makeCharacter(char type, std::shared_ptr<LogicInterface> self, std::shared_ptr<LogicInterface> enemy)
 {
 	switch(type) {
 		case 'n':
@@ -36,22 +36,18 @@ int main(int argc, char *argv[])
 		
 		cmd.parse(argc, argv);
 
-		Logic player1;
-		Logic player2;
-		player1.setEnemy(player2);
-		player2.setEnemy(player1);
-
-		std::shared_ptr<Character> character1 = makeCharacter(char1.getValue(), player1, player2);
-		std::shared_ptr<Character> character2 = makeCharacter(char2.getValue(), player2, player1);
-		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, *character1, *character2);
+		std::shared_ptr<LogicInterface> player1 = std::make_shared<Logic>();
+		std::shared_ptr<LogicInterface> player2;
 
 		std::shared_ptr<TcpClient> client;
 		std::string address = networkgame.getValue();
 
 		GameType type;
 		if (localgame.getValue()) {
+			player2 = std::make_shared<Logic>();
 			type = GameType::TWOPLAYER;
 		}else if (aigame.getValue()) {
+			player2 = std::make_shared<Logic>();
 			type = GameType::AI;
 		}else if (!address.empty()) {
 			auto delim = address.find(":");
@@ -62,10 +58,18 @@ int main(int argc, char *argv[])
 			std::string message = client->receive(5);
 			if (message.empty()) throw std::runtime_error("Did not find any opponent");
 			if (message != "start") throw std::runtime_error("Invalid game start message received");
+			player2 = std::make_shared<PassiveLogic>();
 			type = GameType::NETWORK;
 		} else {
 			throw std::runtime_error("No game type selected. Please select a game type");
 		}
+
+		player1->setEnemy(player2);
+		player2->setEnemy(player1);
+
+		std::shared_ptr<Character> character1 = makeCharacter(char1.getValue(), player1, player2);
+		std::shared_ptr<Character> character2 = makeCharacter(char2.getValue(), player2, player1);
+		std::shared_ptr<View> view = std::make_shared<View>(player1, player2, *character1, *character2);
 
 		GameLoop game(player1, player2, view, *character1, *character2, type, client);
 		game.loop();
