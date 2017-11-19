@@ -1,4 +1,6 @@
 #include "NWController.hh"
+#include "Utility.hh"
+#include <sstream>
 
 void
 NWSController::handleKey(const SDL_Keycode& key)
@@ -16,11 +18,35 @@ NWSController::handleKey(const SDL_Keycode& key)
 }
 
 void
+NWSController::sendMana()
+{
+  std::ostringstream ss;
+	ss << "*M*" << logic_->getMana() << "*#";
+	client_->send(ss.str());
+}
+
+void
 NWSController::tick()
 {
 	//TODO send mana and table and gameover
+	sendMana();
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 	if ( keystate[keyMap_.down] ) logic_->move(0, 1);
+}
+
+void
+NWCController::handleMessage(const std::string& message)
+{
+	auto params = split(message, '*');
+	if (params.size() < 1 || params.at(0).empty()) return;
+	switch (params.at(0).at(0)) {
+		case 'M':
+			if (params.size() < 2) return;
+			logic_->setMana(std::stoi(params.at(1)));
+		break;
+		default:
+		break;
+	}
 }
 
 void
@@ -28,5 +54,9 @@ NWCController::tick()
 {
 	std::string message = client_->receive(0);
 	if (message.empty()) return;
+	auto messages = split(message, '#');
+	for (auto msg : messages) {
+		handleMessage(msg);
+	}
 	//TODO receive, and parse messages, send plusLines from logic
 }
