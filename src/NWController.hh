@@ -34,6 +34,7 @@ public:
 
 private:
 	void sendMana();
+	void sendGameOver();
 
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;

@@ -91,6 +91,7 @@ public:
 	virtual bool canMoveTo(const Shape& shape, const Position& nextPos) = 0;
 	virtual bool pointIsEmpty(unsigned x, unsigned y) = 0;
 	virtual bool finished() = 0;
+	virtual void setFinished(bool finished) {}
 
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
@@ -120,7 +121,11 @@ public:
 	TetrisTable getTableWithShape() override { return landedTable_; }
 	TetrisTable getTable() override { return landedTable_; }
 
-	void newGame() override {}
+	void newGame() override {
+		if (!finished_) gamesWon_++;
+		finished_ = false;
+	}
+
 	void update() override {}
 
 	void setEnemy(std::shared_ptr<LogicInterface> enemy) override {}
@@ -137,7 +142,7 @@ public:
 	bool pointIsEmpty(unsigned x, unsigned y) override { assert(false); }
 	bool finished() override { return finished_; }
 
-	void setFinished(bool finished) { finished_ = finished; }
+	void setFinished(bool finished) override { finished_ = finished; }
 private:
 	void resetCurrent() override {}
 	bool finished_ = false;
