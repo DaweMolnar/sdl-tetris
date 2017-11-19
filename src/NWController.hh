@@ -16,6 +16,7 @@ public:
 	void tick() override;
 
 private:
+	void handleMessage(const std::string& message);
 	std::shared_ptr<TcpClient> client_;
 };
 
@@ -32,6 +33,8 @@ public:
 	void tick() override;
 
 private:
+	void sendMana();
+
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;
 };

@@ -94,6 +94,7 @@ public:
 
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
+	void setMana(size_t mana) { currentMana_ = mana; }
 	void clearMana() { currentMana_ = 0; }
 	void enemyClearedLine() { linesToAdd_++; }
 	virtual void addPlusLine() = 0;
