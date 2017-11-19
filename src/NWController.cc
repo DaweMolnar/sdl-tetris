@@ -26,10 +26,17 @@ NWSController::sendMana()
 }
 
 void
+NWSController::sendGameOver()
+{
+	client_->send("*L*#");
+}
+
+void
 NWSController::tick()
 {
 	//TODO send mana and table and gameover
 	sendMana();
+	if (logic_->finished()) sendGameOver();
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 	if ( keystate[keyMap_.down] ) logic_->move(0, 1);
 }
@@ -43,6 +50,9 @@ NWCController::handleMessage(const std::string& message)
 		case 'M':
 			if (params.size() < 2) return;
 			logic_->setMana(std::stoi(params.at(1)));
+		break;
+		case 'L':
+			logic_->setFinished(true);
 		break;
 		default:
 		break;
