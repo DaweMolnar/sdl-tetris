@@ -2,21 +2,12 @@
 #include "View.hh"
 #include "Character.hh"
 #include "Client.hh"
+#include "Utility.hh"
 
 #include <exception>
 #include <iostream>
 #include <time.h>
 #include <tclap/CmdLine.h>
-
-std::vector<std::string> split(const std::string &s, char delim) {
-  std::stringstream ss(s);
-  std::string item;
-  std::vector<std::string> elems;
-  while (std::getline(ss, item, delim)) {
-    elems.push_back(std::move(item));
-  }
-  return elems;
-}
 
 std::shared_ptr<Character>
 makeCharacter(char type, std::shared_ptr<LogicInterface> self, std::shared_ptr<LogicInterface> enemy)
@@ -39,8 +30,8 @@ getNWCharacter(std::shared_ptr<TcpClient> client)
 	std::string message = client->receive(5);
 	if (message.empty()) throw std::runtime_error("Enemy character did not received in time");
 	auto msg = split(message, '*');
-	if (msg.size() < 3 || msg.at(1) != "C" || msg.at(2).size() != 1) throw std::runtime_error("Bad message format when receiving message from client");
-	return msg.at(2).at(0);
+	if (msg.size() < 2 || msg.at(0) != "C" || msg.at(1).size() != 1) throw std::runtime_error("Bad message format when receiving message from client");
+	return msg.at(1).at(0);
 }
 
 void
@@ -49,6 +40,20 @@ sendLocalCharacter(char character, std::shared_ptr<TcpClient> client)
   std::ostringstream ss;
 	ss << "*C*" << character << "*#";
 	client->send(ss.str());
+}
+
+std::shared_ptr<TcpClient>
+initNWGame(const std::string& address)
+{
+	auto delim = address.find(":");
+	if (delim == std::string::npos) throw std::runtime_error("Wrong format for connect address");
+	std::string ip = address.substr(0, delim);
+	std::string port = address.substr(delim+1);
+	auto client = std::make_shared<TcpClient>(ip, std::stoi(port));
+	std::string message = client->receive(5);
+	if (message.empty()) throw std::runtime_error("Did not find any opponent");
+	if (message != "start") throw std::runtime_error("Invalid game start message received");
+	return client;
 }
 
 int main(int argc, char *argv[])
@@ -81,14 +86,7 @@ int main(int argc, char *argv[])
 			player2 = std::make_shared<Logic>();
 			type = GameType::AI;
 		}else if (!address.empty()) {
-			auto delim = address.find(":");
-			if (delim == std::string::npos) throw std::runtime_error("Wrong format for connect address");
-			std::string ip = address.substr(0, delim);
-			std::string port = address.substr(delim+1);
-			client = std::make_shared<TcpClient>(ip, std::stoi(port));
-			std::string message = client->receive(5);
-			if (message.empty()) throw std::runtime_error("Did not find any opponent");
-			if (message != "start") throw std::runtime_error("Invalid game start message received");
+			client = initNWGame(address);
 			sendLocalCharacter(charStr1, client);
 			charStr2 = getNWCharacter(client);
 			player2 = std::make_shared<PassiveLogic>();

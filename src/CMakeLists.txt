@@ -1,4 +1,4 @@
-add_library(sources Ai.cc GameLoop.cc Logic.cc View.cc Character.cc LocalController.cc NWController.cc Client.cc)
+add_library(sources Utility.cc Ai.cc GameLoop.cc Logic.cc View.cc Character.cc LocalController.cc NWController.cc Client.cc)
 add_executable(Tetris main.cpp)
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
