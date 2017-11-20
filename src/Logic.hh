@@ -98,6 +98,8 @@ public:
 	void setMana(size_t mana) { currentMana_ = mana; }
 	void clearMana() { currentMana_ = 0; }
 	void enemyClearedLine() { linesToAdd_++; }
+	size_t linesToAdd() { return linesToAdd_; }
+	void linesAdded() { linesToAdd_ = 0; }
 	virtual void addPlusLine() = 0;
 
 	void changeTable(TetrisTable& newTable) { resetCurrent(); landedTable_ = newTable; }
