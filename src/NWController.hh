@@ -18,6 +18,7 @@ public:
 
 private:
 	void handleMessage(const std::string& message);
+	void updateTable(const std::string& table);
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> serverLogic_;
 };
@@ -40,6 +41,7 @@ private:
 	void sendLinesToAdd();
 	void sendGameOver();
 	void sendSpecial();
+	void sendTable();
 
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;
