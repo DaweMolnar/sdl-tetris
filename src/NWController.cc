@@ -13,9 +13,16 @@ NWSController::handleKey(const SDL_Keycode& key)
 		logic_->rotate();
 	} else if (key == keyMap_.special) {
 		character_.doSpecial();
-		//TODO send special
+		sendSpecial();
 	}
 }
+
+void
+NWSController::sendSpecial()
+{
+	client_->send("*S*#");
+}
+
 
 void
 NWSController::sendMana()
@@ -23,6 +30,16 @@ NWSController::sendMana()
   std::ostringstream ss;
 	ss << "*M*" << logic_->getMana() << "*#";
 	client_->send(ss.str());
+}
+
+void
+NWSController::sendLinesToAdd()
+{
+	if (!clientLogic_->linesToAdd()) return;
+  std::ostringstream ss;
+	ss << "*A*" << clientLogic_->linesToAdd() << "*#";
+	client_->send(ss.str());
+	clientLogic_->linesAdded();
 }
 
 void
@@ -34,8 +51,9 @@ NWSController::sendGameOver()
 void
 NWSController::tick()
 {
-	//TODO send mana and table and gameover
+	//TODO table
 	sendMana();
+	sendLinesToAdd();
 	if (logic_->finished()) sendGameOver();
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 	if ( keystate[keyMap_.down] ) logic_->move(0, 1);
@@ -53,6 +71,15 @@ NWCController::handleMessage(const std::string& message)
 		break;
 		case 'L':
 			logic_->setFinished(true);
+		break;
+		case 'S':
+			character_.doSpecial();
+		break;
+		case 'A':
+			if (params.size() < 2) return;
+			for (int i = 0; i < std::stoi(params.at(1)); i++) {
+				serverLogic_->addPlusLine();
+			}
 		break;
 		default:
 		break;

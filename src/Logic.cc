@@ -1,5 +1,4 @@
 #include "Logic.hh"
-#include <iostream>
 
 Shape
 rotate(const Shape& shape)
