@@ -40,9 +40,12 @@ private:
 	void sendMana();
 	void sendLinesToAdd();
 	void sendGameOver();
+	void sendTetromino();
 	void sendSpecial();
 	void sendTable();
 
+	const time_t tableSendDelay_ = 1/100;
+	time_t lastTableSent_ = 0;
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> clientLogic_;

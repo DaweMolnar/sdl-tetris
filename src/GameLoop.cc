@@ -15,10 +15,10 @@ GameLoop::GameLoop(std::shared_ptr<LogicInterface> logic1, std::shared_ptr<Logic
 	KeyMap km2{SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDL_SCANCODE_DOWN, SDLK_RSHIFT};
 	KeyMap km1{SDLK_a, SDLK_d, SDLK_w, SDL_SCANCODE_S, SDLK_LSHIFT}; //TODO get from parameter
 	if (type == GameType::NETWORK) {
-		controlPlayer1_ = std::make_unique<NWSController>(logicPlayer1_, logicPlayer2_, character1, client, km1);
+		controlPlayer1_ = std::make_unique<NWSController>(logicPlayer1_, logicPlayer2_, character1, client, km2);
 		controlPlayer2_ = std::make_unique<NWCController>(logicPlayer2_, logicPlayer1_, character2, client);
 	} else if (type == GameType::AI) {
-		controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1, km1);
+		controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1, km2);
 		controlPlayer2_ = std::make_unique<Ai>(logicPlayer2_, character2);
 	} else {
 		controlPlayer1_ = std::make_unique<LocalController>(logicPlayer1_, character1, km1);

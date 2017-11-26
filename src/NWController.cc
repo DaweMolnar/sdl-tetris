@@ -74,10 +74,20 @@ NWSController::sendTable()
 }
 
 void
+NWSController::sendTetromino()
+{
+}
+
+void
 NWSController::tick()
 {
-	sendTable();
-	sendMana();
+	time_t currentTime = time(nullptr);
+	if (currentTime > lastTableSent_ + tableSendDelay_) {
+		lastTableSent_ = currentTime;
+		sendTable();
+		sendTetromino();
+		sendMana();
+	}
 	sendLinesToAdd();
 	if (logic_->finished()) sendGameOver();
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
