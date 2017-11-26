@@ -36,9 +36,10 @@ LogicInterface::clear()
 	}
 }
 
-Logic::TetrisTable
-Logic::getTableWithShape()
+LogicInterface::TetrisTable
+LogicInterface::getTableWithShape()
 {
+	if (!currentShape_) return landedTable_;
 	if (!canMoveTo(currentShape_->shape, currentShape_->topLeft)) return landedTable_;
 	TetrisTable fullTable = landedTable_;
 	for (size_t i = 0; i < currentShape_->shape.size(); i++) {
@@ -52,7 +53,7 @@ Logic::getTableWithShape()
 }
 
 bool
-Logic::canMoveTo(const Shape& shape, const Position& nextPos)
+LogicInterface::canMoveTo(const Shape& shape, const Position& nextPos)
 {
 	for (size_t i = 0; i < shape.size(); i++) {
 		for (size_t j = 0; j < shape.at(i).size(); j++) {
@@ -211,7 +212,7 @@ Logic::removeTopLines(size_t lines)
 }
 
 bool
-Logic::pointIsEmpty(unsigned x, unsigned y)
+LogicInterface::pointIsEmpty(unsigned x, unsigned y)
 {
 	if (x >= landedTable_.size() || y >= landedTable_.at(0).size()) return false;
 	return (landedTable_.at(x).at(y) == Color::none);
