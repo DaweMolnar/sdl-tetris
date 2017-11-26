@@ -19,6 +19,7 @@ public:
 private:
 	void handleMessage(const std::string& message);
 	void updateTable(const std::string& table);
+	void updateTetromino(size_t pos1, size_t pos2, size_t row, size_t col, const std::string& shape);
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> serverLogic_;
 };

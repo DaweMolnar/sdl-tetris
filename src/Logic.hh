@@ -63,6 +63,10 @@ struct Tetromino {
 		assert(startRow > 0 && startRow < TETRIS_ROW);
 		topLeft = std::make_pair(startRow, 0u);
 	}
+
+	Tetromino(Shape& _shape, Position& _topLeft)
+	: shape(_shape), topLeft(_topLeft)
+	{}
 };
 
 class LogicInterface
@@ -91,6 +95,7 @@ public:
 	bool canMoveTo(const Shape& shape, const Position& nextPos);
 	bool pointIsEmpty(unsigned x, unsigned y);
 	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
+	void changeCurrentShape(std::shared_ptr<Tetromino> newShape) { std::swap(newShape, currentShape_); }
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
 	void setMana(size_t mana) { currentMana_ = mana; }
