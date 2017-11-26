@@ -26,6 +26,9 @@ const
 void
 Ai::tick()
 {
+	auto currentTime = std::chrono::system_clock::now();
+	if (currentTime < lastMove_ + thinkTime_) return;
+	lastMove_ = currentTime;
 	auto originShape = logic_->getCurrentShape().shape;
 	auto currentPos = logic_->getCurrentShape().topLeft;
 

@@ -63,6 +63,10 @@ struct Tetromino {
 		assert(startRow > 0 && startRow < TETRIS_ROW);
 		topLeft = std::make_pair(startRow, 0u);
 	}
+
+	Tetromino(Shape& _shape, Position& _topLeft)
+	: shape(_shape), topLeft(_topLeft)
+	{}
 };
 
 class LogicInterface
@@ -72,10 +76,6 @@ public:
 	virtual ~LogicInterface() {}
 	
 	virtual std::shared_ptr<Tetromino> getNextShape() = 0;
-	virtual Tetromino& getCurrentShape() = 0;
-	virtual TetrisTable getTableWithShape() = 0;
-	virtual TetrisTable getTable() = 0;
-
 	virtual void newGame() = 0;
 	virtual void update() = 0;
 
@@ -87,12 +87,15 @@ public:
 	virtual void move(unsigned x, unsigned y) = 0;
 	virtual void rotate() = 0;
 	virtual void generateNewCurrentShape() = 0;
-
-	virtual bool canMoveTo(const Shape& shape, const Position& nextPos) = 0;
-	virtual bool pointIsEmpty(unsigned x, unsigned y) = 0;
 	virtual bool finished() = 0;
-	virtual void setFinished(bool finished) {}
 
+	virtual void setFinished(bool finished) {}
+	TetrisTable getTableWithShape();
+	TetrisTable getTable() { return landedTable_; }
+	bool canMoveTo(const Shape& shape, const Position& nextPos);
+	bool pointIsEmpty(unsigned x, unsigned y);
+	Tetromino& getCurrentShape() { assert(currentShape_); return *currentShape_; }
+	void changeCurrentShape(std::shared_ptr<Tetromino> newShape) { std::swap(newShape, currentShape_); }
 	size_t gamesWon() { return gamesWon_; }
 	size_t getMana() { return currentMana_; }
 	void setMana(size_t mana) { currentMana_ = mana; }
@@ -112,6 +115,8 @@ protected:
 	size_t linesToAdd_ = 0;
 	size_t gamesWon_ = 0;
 	size_t currentMana_ = 0;
+
+	std::shared_ptr<Tetromino> currentShape_;
 };
 
 class PassiveLogic : public LogicInterface
@@ -119,9 +124,6 @@ class PassiveLogic : public LogicInterface
 public:
 	PassiveLogic() { clear(); }
 	std::shared_ptr<Tetromino> getNextShape() override { return nullptr; }
-	Tetromino& getCurrentShape() override { assert(false); }
-	TetrisTable getTableWithShape() override { return landedTable_; }
-	TetrisTable getTable() override { return landedTable_; }
 
 	void newGame() override {
 		if (!finished_) gamesWon_++;
@@ -140,8 +142,6 @@ public:
 	void generateNewCurrentShape() override {}
 	void addPlusLine() override {}
 
-	bool canMoveTo(const Shape& shape, const Position& nextPos) override { assert(false); }
-	bool pointIsEmpty(unsigned x, unsigned y) override { assert(false); }
 	bool finished() override { return finished_; }
 
 	void setFinished(bool finished) override { finished_ = finished; }
@@ -157,9 +157,6 @@ public:
 	~Logic();
 
 	std::shared_ptr<Tetromino> getNextShape() override { return nextShape_; }
-	Tetromino& getCurrentShape() override { assert(currentShape_); return *currentShape_; }
-	TetrisTable getTableWithShape() override;
-	TetrisTable getTable() override { return landedTable_; }
 
 	void newGame() override;
 	void update() override;
@@ -171,11 +168,8 @@ public:
 	void removeLine() override;
 	void removeTopLines(size_t lines) override;
 	void clearTable() override { clear(); }
-	bool canMoveTo(const Shape& shape, const Position& nextPos) override;
 	void generateNewCurrentShape() override { currentShape_ = std::make_shared<Tetromino>(); }
 	void addPlusLine() override { linesToAdd_++; }
-
-	bool pointIsEmpty(unsigned x, unsigned y) override;
 private:
 	void landCurrent();
 	void resetCurrent() override;
@@ -184,7 +178,6 @@ private:
 	void clearStats();
 	void addLine();
 
-	std::shared_ptr<Tetromino> currentShape_;
 	std::shared_ptr<Tetromino> nextShape_;
 	bool gameFailed_ = false;
 	std::shared_ptr<LogicInterface> enemy_;

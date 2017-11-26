@@ -3,6 +3,7 @@
 #include "ControllerInterface.hh"
 #include "Client.hh"
 #include "KeyMap.hh"
+#include <chrono>
 
 class NWCController : public ControllerInterface
 {
@@ -19,6 +20,7 @@ public:
 private:
 	void handleMessage(const std::string& message);
 	void updateTable(const std::string& table);
+	void updateTetromino(size_t pos1, size_t pos2, size_t row, size_t col, const std::string& shape);
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> serverLogic_;
 };
@@ -40,9 +42,12 @@ private:
 	void sendMana();
 	void sendLinesToAdd();
 	void sendGameOver();
+	void sendTetromino();
 	void sendSpecial();
 	void sendTable();
 
+	const std::chrono::duration<double> tableSendDelay_ = std::chrono::milliseconds(600) ;
+	std::chrono::time_point<std::chrono::system_clock> lastTableSent_ = std::chrono::time_point<std::chrono::system_clock>::min();
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> clientLogic_;

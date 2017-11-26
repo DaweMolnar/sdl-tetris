@@ -18,6 +18,8 @@ class Forwarder:
 
     def removeClient(self, client):
         self.clients.remove(client)
+        for client in self.clients:
+            client.send("*D*#")
 
     def acceptMore(self):
         return len(self.clients) < 2
