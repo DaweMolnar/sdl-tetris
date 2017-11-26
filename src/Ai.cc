@@ -24,11 +24,25 @@ const
 }
 
 void
+Ai::useSpecial()
+{
+	size_t dangerZone = 4;
+	auto table = logic_->getTable();
+	assert(dangerZone < table.size());
+	for (size_t i = 0 ; i < dangerZone; i++) {
+		if (std::find_if_not(table.at(i).begin(), table.at(i).end(), [](auto i) { return (i == Color::none); }) != table.at(i).end()) {
+			character_.doSpecial();
+		}
+	}
+}
+
+void
 Ai::tick()
 {
 	auto currentTime = std::chrono::system_clock::now();
 	if (currentTime < lastMove_ + thinkTime_) return;
 	lastMove_ = currentTime;
+	useSpecial();
 	auto originShape = logic_->getCurrentShape().shape;
 	auto currentPos = logic_->getCurrentShape().topLeft;
 
