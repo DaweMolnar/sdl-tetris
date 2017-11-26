@@ -201,6 +201,9 @@ NWCController::handleMessage(const std::string& message)
 			if (params.size() < 6) return;
 			updateTetromino(std::stoi(params.at(1)), std::stoi(params.at(2)), std::stoi(params.at(3)), std::stoi(params.at(4)), params.at(5));
 		break;
+		case 'D':
+			throw std::runtime_error("Enemy disconnected");
+		break;
 		default:
 		break;
 	}
