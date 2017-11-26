@@ -104,7 +104,7 @@ NWSController::sendTetromino()
 void
 NWSController::tick()
 {
-	time_t currentTime = time(nullptr);
+	auto currentTime = std::chrono::system_clock::now();
 	if (currentTime > lastTableSent_ + tableSendDelay_) {
 		lastTableSent_ = currentTime;
 		sendTable();

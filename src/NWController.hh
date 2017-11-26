@@ -3,6 +3,7 @@
 #include "ControllerInterface.hh"
 #include "Client.hh"
 #include "KeyMap.hh"
+#include <chrono>
 
 class NWCController : public ControllerInterface
 {
@@ -45,8 +46,8 @@ private:
 	void sendSpecial();
 	void sendTable();
 
-	const time_t tableSendDelay_ = 1/100;
-	time_t lastTableSent_ = 0;
+	const std::chrono::duration<double> tableSendDelay_ = std::chrono::milliseconds(600) ;
+	std::chrono::time_point<std::chrono::system_clock> lastTableSent_ = std::chrono::time_point<std::chrono::system_clock>::min();
 	KeyMap keyMap_;
 	std::shared_ptr<TcpClient> client_;
 	std::shared_ptr<LogicInterface> clientLogic_;
