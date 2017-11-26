@@ -11,8 +11,9 @@ public:
 	void tick() override;
 	void handleKey(const SDL_Keycode&) override {}
 private:
+	void useSpecial();
+	int getLogicScore(const Position pos, const Shape& shape) const;
 	const std::chrono::duration<double> thinkTime_ = std::chrono::milliseconds(50) ;
 	std::chrono::time_point<std::chrono::system_clock> lastMove_ = std::chrono::time_point<std::chrono::system_clock>::min();
-	int getLogicScore(const Position pos, const Shape& shape) const;
 };
 
