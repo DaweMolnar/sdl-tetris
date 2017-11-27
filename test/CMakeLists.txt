@@ -1,5 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include_test)
-add_executable(run_tests run_tests.cc SampleTest.cc UtilityTest.cc)
+add_executable(run_tests run_tests.cc SampleTest.cc UtilityTest.cc LogicTest.cc)
 SET_TARGET_PROPERTIES(run_tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 ADD_CUSTOM_COMMAND(TARGET run_tests POST_BUILD
