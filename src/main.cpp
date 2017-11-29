@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
 	srand((unsigned)time(NULL));
 	try {
 		TCLAP::CmdLine cmd("Multiplayer tetris", ' ', "0.1.1");
-		TCLAP::ValueArg<char> char1("1", "character-1", "Player 1 character", true, 'n', "name", cmd);
-		TCLAP::ValueArg<char> char2("2", "character-2", "Player 2 character", false, ' ', "name", cmd);
+		TCLAP::ValueArg<char> char1("1", "character-1", "Player 1 character n Ninja, w Warrior, m Mage", true, 'n', "name", cmd);
+		TCLAP::ValueArg<char> char2("2", "character-2", "Player 2 character n Ninja, w Warrior, m Mage", false, ' ', "name", cmd);
 		TCLAP::SwitchArg localgame("l", "local-game", "Local multiplayer", cmd, false);
 		TCLAP::SwitchArg aigame("a", "ai-game", "Against AI", cmd, false);
 		TCLAP::ValueArg<std::string> networkgame("n", "enemy-addr", "Network game enemy address", false, {"tcp://127.0.0.1:4242"}, "address", cmd);
