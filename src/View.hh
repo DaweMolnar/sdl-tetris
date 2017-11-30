@@ -5,7 +5,6 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <SDL_mixer.h>
 
 class ViewInterface {
 public:
@@ -38,7 +37,6 @@ private:
 	
 	SDL_Window* window_;
 	SDL_Renderer* ren_;
-//	Mix_Music* bgMusic_;
 	TTF_Font* font_;
 	SDL_Texture* background_;
 	SDL_Texture* blockTexture_;
