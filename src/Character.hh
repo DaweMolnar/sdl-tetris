@@ -45,7 +45,7 @@ private:
 	void skillLow() override;
 	void skillMedium() override;
 	void skillHigh() override;
-	std::array<std::string, 3> getSpecials() override { return {{"1 Erase","2 Transform","3 Mirror"}}; }
+	std::array<std::string, 3> getSpecials() override { return {{"1 Erase","2 Convert","3 Mirror"}}; }
 };
 
 class Warrior : public Character {
